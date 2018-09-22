@@ -17,7 +17,7 @@ public class Main {
 		integers.add(5);
 		String ans1 = "" + iteratingexamples.Act2Iterator(integers);
 		ans = "Iterator Sum = " + ans1;
-
+		
         System.out.println(ans);
   }
 }
