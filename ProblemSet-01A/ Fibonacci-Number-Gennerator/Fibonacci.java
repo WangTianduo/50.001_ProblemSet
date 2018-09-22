@@ -1,11 +1,9 @@
-package com.cohort_session_1;
+// **ATTENTION**
+// Edit just this file to submit your answer
+// You need not edit the Main.java file 
 
-/**
- * Created by User on 2018/9/19.
- */
-
-public class Fibonacci {
-
+public class Fibonacci{
+    
     public static String fibonacci( int n ){
 
         int f1 = 0;
@@ -24,6 +22,7 @@ public class Fibonacci {
         }
 
         return ans;
-
+    
     }
+        
 }
