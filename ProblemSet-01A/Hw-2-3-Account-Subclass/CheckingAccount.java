@@ -14,7 +14,7 @@ public class CheckingAccount extends Account{
     super(_id, _balance);
   }
 
-  void withdraw(double amount) {
+  public void withdraw(double amount) {
     if (getBalance() - amount < -5000) {
       System.out.println("over limit");
     }else {
