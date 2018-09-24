@@ -23,16 +23,41 @@ public class WordFinder {
 
         HashMap<String, Integer> output = new HashMap<String, Integer>();
         System.out.println(haystack);
-        for (String s : needles) {
-          int wordLength = s.length();
-          //System.out.println(s);
-          for (int i = 0; i < haystack.length() - wordLength; i++) {
-            if (s == haystack.substring(i, i+wordLength)) {
-              System.out.println("!");
-              output.put(s, i);
-            }
+
+        int wordLength = 0;
+
+        for (String s: needles) {
+          int result = match(s, haystack);
+          if (result != -1) {
+            output.put(s, result);
           }
         }
         return output;
     }
+
+    public static int match(String subString, String longString) {
+
+		int length = longString.length();
+		int wordLength = subString.length();
+		int match = -1;
+
+		for (int i = 0; i < length - wordLength + 1; i++) {
+
+			if (subString.charAt(0) == longString.charAt(i)) {
+
+				for (int j = 0; j < wordLength; j++) {
+
+					if (subString.charAt(j) == longString.charAt(i+j)) {
+						if (j == wordLength - 1) {
+							match = i;
+						}
+					}else{
+						break;
+					}
+				}
+			}
+
+		}
+		return match;
+	}
 }
