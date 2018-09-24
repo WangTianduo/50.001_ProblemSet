@@ -1,13 +1,13 @@
-package piwords;
+//package piwords;
 
 public class AlphabetGenerator {
     /**
      * Given a numeric base, return a char[] that maps every digit that is
      * representable in that base to a lower-case char.
-     * 
+     *
      * This method will try to weight each character of the alphabet
      * proportional to their occurrence in words in a training set.
-     * 
+     *
      * This method should do the following to generate an alphabet:
      *   1. Count the occurrence of each character a-z in trainingData.
      *   2. Compute the probability of each character a-z by taking
@@ -18,7 +18,7 @@ public class AlphabetGenerator {
      *      converting into.
      *   5. For each index 0 <= i < base,
      *      output[i] = (the first character whose CDF * base is > i)
-     * 
+     *
      * A concrete example:
      * 	 0. Input = {"aaaaa..." (302 "a"s), "bbbbb..." (500 "b"s),
      *               "ccccc..." (198 "c"s)}, base = 93
@@ -30,20 +30,20 @@ public class AlphabetGenerator {
      *   5. Output = {"a", "a", ... (29 As, indexes 0-28),
      *                "b", "b", ... (46 Bs, indexes 29-74),
      *                "c", "c", ... (18 Cs, indexes 75-92)}
-     * 
+     *
      * The letters should occur in lexicographically ascending order in the
      * returned array.
      *   - {"a", "b", "c", "c", "d"} is a valid output.
      *   - {"b", "c", "c", "d", "a"} is not.
-     *   
+     *
      * If base >= 0, the returned array should have length equal to the size of
      * the base.
-     * 
+     *
      * If base < 0, return null.
-     * 
+     *
      * If a String of trainingData has any characters outside the range a-z,
      * ignore those characters and continue.
-     * 
+     *
      * @param base A numeric base to get an alphabet for.
      * @param trainingData The training data from which to generate frequency
      *                     counts. This array is not mutated.

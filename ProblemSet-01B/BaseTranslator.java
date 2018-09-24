@@ -1,4 +1,4 @@
-package piwords;
+//package piwords;
 
 public class BaseTranslator {
     /**
@@ -14,7 +14,7 @@ public class BaseTranslator {
      * baseB and chopping off the most significant digit at each iteration:
      *
      * for (i < precisionB) {
-     *   1. Keep a carry, initialize to 0.
+     *   1. Keep a carry, initialize to 0
      *   2. From RIGHT to LEFT
      *   	a. x = multiply the jth digit by baseB and add the carry
      *          b. the new jth digit is x % baseA
@@ -38,10 +38,18 @@ public class BaseTranslator {
         if ((baseA < 2) || (baseB < 2) || precisionB < 1) {
           return null;
         }
+      
+        int output[] = new int[precisionB];
+
         for (int i = 0; i < precisionB; i++) {
           int carry = 0;
-          int x = digits[i] * baseB + carry;
+          for (int j = precisionB - 1; j >= 0; j--) {
+            int x = digits[j] * baseB + carry;
+            digits[j] = x % baseA;
+            carry = x / baseA;
+          }
+          output[i] = carry;
         }
-        return null;
+        return output;
     }
 }

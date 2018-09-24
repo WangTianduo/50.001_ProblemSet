@@ -1,4 +1,4 @@
-package piwords;
+//package piwords;
 
 public class PiGenerator {
     /**
@@ -21,7 +21,7 @@ public class PiGenerator {
         int[] output = new int[precision];
 
         for (int i = 0; i < precision; i++) {
-          output[0] = piDigit(i);
+          output[i] = piDigit(i+1);
         }
         return output;
     }
@@ -41,7 +41,7 @@ public class PiGenerator {
         if((a < 0 && b < 0) || m <= 0) {
             return -1;
         }
-        return Math.pow(a. b) % m;
+        return ((int)Math.pow(a, b)) % m;
     }
 
     /**

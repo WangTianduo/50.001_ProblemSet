@@ -1,11 +1,11 @@
-package piwords;
+//package piwords;
 
 public class DigitsToStringConverter {
     /**
      * Given a list of digits, a base, and an mapping of digits of that base to
      * chars, convert the list of digits into a character string by applying the
      * mapping to each digit in the input.
-     * 
+     *
      * If digits[i] >= base or digits[i] < 0 for any i, consider the input
      * invalid, and return null.
      * If alphabet.length != base, consider the input invalid, and return null.
@@ -19,6 +19,17 @@ public class DigitsToStringConverter {
     public static String convertDigitsToString(int[] digits, int base,
                                                char[] alphabet) {
         // TODO: Implement (Problem d)
-        return "";
+
+        if (alphabet.length != base) return null;
+
+        String output = "";
+        for (int i : digits) {
+          if (i >= base || i < 0) {
+            return null;
+          }
+          output += alphabet[i];
+        }
+
+        return output;
     }
 }

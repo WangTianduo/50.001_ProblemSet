@@ -1,4 +1,4 @@
-package piwords;
+//package piwords;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,15 +11,28 @@ public class WordFinder {
      * value for each key is the lowest index of haystack at which that needle
      * was found. A needle that was not found in the haystack should not be
      * returned in the output map.
-     * 
+     *
      * @param haystack The string to search into.
      * @param needles The array of strings to search for. This array is not
      *                mutated.
      * @return The list of needles that were found in the haystack.
      */
     public static Map<String, Integer> getSubstrings(String haystack,
-                                                     String[] needles) { 
+                                                     String[] needles) {
         // TODO: Implement (Problem e)
-        return new HashMap<String, Integer>();
+
+        HashMap<String, Integer> output = new HashMap<String, Integer>();
+        System.out.println(haystack);
+        for (String s : needles) {
+          int wordLength = s.length();
+          //System.out.println(s);
+          for (int i = 0; i < haystack.length() - wordLength; i++) {
+            if (s == haystack.substring(i, i+wordLength)) {
+              System.out.println("!");
+              output.put(s, i);
+            }
+          }
+        }
+        return output;
     }
 }
