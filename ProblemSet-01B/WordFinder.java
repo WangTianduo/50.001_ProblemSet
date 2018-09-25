@@ -22,10 +22,11 @@ public class WordFinder {
         // TODO: Implement (Problem e)
 
         HashMap<String, Integer> output = new HashMap<String, Integer>();
-        System.out.println(haystack);
 
+        if (needles.length == 0) return null;
+        
         int wordLength = 0;
-
+        
         for (String s: needles) {
           int result = match(s, haystack);
           if (result != -1) {
