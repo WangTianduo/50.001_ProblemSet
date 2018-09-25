@@ -53,6 +53,23 @@ public class AlphabetGenerator {
     public static char[] generateFrequencyAlphabet(int base,
                                                    String[] trainingData) {
         // TODO: Implement (Problem f)
+        
+        if (base < 0) return null;
+
+                char[] output = new char[trainingData.length];
+
+                HashMap<String, Integer> dict = new HashMap<>();
+
+                for (String s: trainingData) {
+                    if (dict.containsKey(s)) {
+                        int times = dict.get(s);
+                        dict.put(s, ++times);
+                    }else {
+                        dict.put(s, 1);
+                    }
+                }
+
+                
         return null;
     }
 }
