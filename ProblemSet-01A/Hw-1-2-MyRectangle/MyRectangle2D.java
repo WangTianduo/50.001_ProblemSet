@@ -75,7 +75,7 @@ public class MyRectangle2D {
 
     boolean contains(double newX, double newY) {
 
-        if (newX <= x + width / 2 && newX >= x - width / 2 && newY <= y + height/2 && newY >= y + height/2) {
+        if (newX <= x + width / 2 && newX >= x - width / 2 && newY <= y + height/2 && newY >= y - height/2) {
 
             return true;
         }else{
@@ -104,7 +104,7 @@ public class MyRectangle2D {
             double newUpMost = newY + newHeight / 2;
             double newDownMost = newY - newHeight / 2;
 
-            if (thisLeftMost >= newLeftMost && thisRightMost <= newRightMost && thisDownMost <= newDownMost && thisUpMost >= newUpMost) {
+            if (thisLeftMost <= newLeftMost && thisRightMost >= newRightMost && thisDownMost <= newDownMost && thisUpMost >= newUpMost) {
                 return true;
             }else{
                 return false;
