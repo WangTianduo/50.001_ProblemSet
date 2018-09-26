@@ -94,13 +94,13 @@ public class MyRectangle2D {
 
         if (contains(newX, newY)) {
 
-            double thisLeftMost = x + width / 2;
-            double thisRightMost = x - width / 2;
+            double thisLeftMost = x - width / 2;
+            double thisRightMost = x + width / 2;
             double thisUpMost = y + height / 2;
             double thisDownMost = y - height / 2;
 
-            double newLeftMost = newX + newWidth / 2;
-            double newRightMost = newX - newWidth / 2;
+            double newLeftMost = newX - newWidth / 2;
+            double newRightMost = newX + newWidth / 2;
             double newUpMost = newY + newHeight / 2;
             double newDownMost = newY - newHeight / 2;
 
