@@ -1,0 +1,14 @@
+.include "/Users/wangtianduo/Desktop/Term4/50.002_Computational_Structure/Software-Lab/Lab2/fullAdder.jsim"
+.include "/Users/wangtianduo/Desktop/Term4/50.002_Computational_Structure/courseware/lab2checkoff.jsim"
+
+.subckt ADDER4 a3 a2 a1 a0 b3 b2 b1 b0 s4 s3 s2 s1 s0
+
+Xbit0 a0 b0 0 s0 c0 fullAdder
+Xbit1 a1 b1 c0 s1 c1 fullAdder
+Xbit2 a2 b2 c1 s2 c2 fullAdder
+Xbit3 a3 b3 c2 s3 s4 fullAdder
+
+.ends
+
+.plot Xtest.c0
+.plot Xtest.s0

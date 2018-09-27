@@ -1,0 +1,20 @@
+.include "/Users/wangtianduo/Desktop/Term4/50.002_Computational_Structure/Software-Lab/Lab2/gates.jsim"
+
+.subckt fullAdder a b cin s cout
+
+Xxor1 a b 1 xor2
+Xxor2 1 cin s xor2
+
+Xnand1 a b 2 nand2
+Xnand2 1 cin 3 nand2
+Xnand3 3 2 cout nand2
+
+.ends
+
+Xtest clk1 clk2 clk3 s cout fullAdder
+.tran 40ns
+.plot clk1
+.plot clk2
+.plot clk3
+.plot s
+.plot cout
