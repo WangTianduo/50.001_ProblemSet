@@ -35,7 +35,7 @@ public class Account {
         return this.balance;
     }
 
-    double getAnnualInterestRate() {
+    static double getAnnualInterestRate() {
 
         return this.annualInterestRate;
     }
