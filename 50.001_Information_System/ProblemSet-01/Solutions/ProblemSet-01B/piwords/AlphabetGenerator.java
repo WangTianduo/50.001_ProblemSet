@@ -1,13 +1,14 @@
-//package piwords;
+package piwords;
+import java.util.*;
 
 public class AlphabetGenerator {
     /**
      * Given a numeric base, return a char[] that maps every digit that is
      * representable in that base to a lower-case char.
-     *
+     * 
      * This method will try to weight each character of the alphabet
      * proportional to their occurrence in words in a training set.
-     *
+     * 
      * This method should do the following to generate an alphabet:
      *   1. Count the occurrence of each character a-z in trainingData.
      *   2. Compute the probability of each character a-z by taking
@@ -18,7 +19,7 @@ public class AlphabetGenerator {
      *      converting into.
      *   5. For each index 0 <= i < base,
      *      output[i] = (the first character whose CDF * base is > i)
-     *
+     * 
      * A concrete example:
      * 	 0. Input = {"aaaaa..." (302 "a"s), "bbbbb..." (500 "b"s),
      *               "ccccc..." (198 "c"s)}, base = 93
@@ -30,20 +31,20 @@ public class AlphabetGenerator {
      *   5. Output = {"a", "a", ... (29 As, indexes 0-28),
      *                "b", "b", ... (46 Bs, indexes 29-74),
      *                "c", "c", ... (18 Cs, indexes 75-92)}
-     *
+     * 
      * The letters should occur in lexicographically ascending order in the
      * returned array.
      *   - {"a", "b", "c", "c", "d"} is a valid output.
      *   - {"b", "c", "c", "d", "a"} is not.
-     *
+     *   
      * If base >= 0, the returned array should have length equal to the size of
      * the base.
-     *
+     * 
      * If base < 0, return null.
-     *
+     * 
      * If a String of trainingData has any characters outside the range a-z,
      * ignore those characters and continue.
-     *
+     * 
      * @param base A numeric base to get an alphabet for.
      * @param trainingData The training data from which to generate frequency
      *                     counts. This array is not mutated.
@@ -53,23 +54,52 @@ public class AlphabetGenerator {
     public static char[] generateFrequencyAlphabet(int base,
                                                    String[] trainingData) {
         // TODO: Implement (Problem f)
-        
-        if (base < 0) return null;
-
-                char[] output = new char[trainingData.length];
-
-                HashMap<String, Integer> dict = new HashMap<>();
-
-                for (String s: trainingData) {
-                    if (dict.containsKey(s)) {
-                        int times = dict.get(s);
-                        dict.put(s, ++times);
-                    }else {
-                        dict.put(s, 1);
+    	if (base<0)return null;
+        if(base == 0){
+            return new char[0];
+        }
+        Map<Character,Integer> occurence = new HashMap<Character,Integer>();
+        for (String i : trainingData) {
+            char[] charline = i.toCharArray();
+            for (char character: charline) {
+                // Ignore anything that is not a-z
+                if (Character.isLetter(character) && Character.isLowerCase(character)) {
+                    if (occurence.containsKey(character)) {
+                        occurence.put(character, occurence.get(character) + 1);
+                    } else {
+                        occurence.put(character, 1);
                     }
                 }
+            }
+        }
 
-                
-        return null;
+        Character[] keys = occurence.keySet().toArray(new Character[0]);
+        Arrays.sort(keys);
+        
+        int total = 0;
+        for (char i : keys) {
+            total += occurence.get(i);
+        }
+        
+        Map<Character, Float> cumProbs = new HashMap<Character, Float>();
+        float prior = 0f;
+        for (char i : keys) {
+            float prob = (float) occurence.get(i)/total;
+            cumProbs.put(i, prob + prior);
+            prior = prior + prob;
+        }
+
+
+        // Write the output array
+        char[] output = new char[base];
+        int j = 0;
+        for (char i : keys) {
+            int limit = Math.round(cumProbs.get(i) * base)-1;
+            while ((j <= limit) && (j < base)) {
+                output[j] = i;
+                j++;
+            }
+        }
+        return output;
     }
 }

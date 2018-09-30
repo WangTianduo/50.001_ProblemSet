@@ -1,4 +1,4 @@
-//package piwords;
+package piwords;
 
 public class BaseTranslator {
     /**
@@ -31,24 +31,29 @@ public class BaseTranslator {
      *                   have.
      * @return An array of size precisionB expressing digits in baseB.
      */
-    public static int[] convertBase(int[] digits, int baseA,
-                                    int baseB, int precisionB) {
-        // TODO: Implement (Problem c)
+    public static int[] convertBase(int[] digits, int baseA, int baseB, int precisionB) {
 
-        if ((baseA < 2) || (baseB < 2) || precisionB < 1) {
-          return null;
+        if (baseA < 2) return null;
+        if (baseB < 2) return null;
+        if (precisionB < 1) return null;
+        if (digits.length < 1) return null;
+
+        for (int i: digits) {
+            if (i < 0 || i >= baseA) return null;
         }
-      
+
+
         int output[] = new int[precisionB];
 
         for (int i = 0; i < precisionB; i++) {
-          int carry = 0;
-          for (int j = precisionB - 1; j >= 0; j--) {
-            int x = digits[j] * baseB + carry;
-            digits[j] = x % baseA;
-            carry = x / baseA;
-          }
-          output[i] = carry;
+            int carry = 0;
+            for (int j = digits.length - 1; j >= 0; j--) {
+
+                int x = digits[j] * baseB + carry;
+                digits[j] = x % baseA;
+                carry = x / baseA;
+            }
+            output[i] = carry;
         }
         return output;
     }

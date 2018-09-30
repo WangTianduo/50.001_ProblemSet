@@ -1,4 +1,4 @@
-//package piwords;
+package piwords;
 
 public class DigitsToStringConverter {
     /**
@@ -24,12 +24,13 @@ public class DigitsToStringConverter {
 
         String output = "";
         for (int i : digits) {
-          if (i >= base || i < 0) {
-            return null;
-          }
-          output += alphabet[i];
+            if (i >= base || i < 0) {
+                return null;
+            }
+            output += alphabet[i];
         }
 
         return output;
     }
 }
+

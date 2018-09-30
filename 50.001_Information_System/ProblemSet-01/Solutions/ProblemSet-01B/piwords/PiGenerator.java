@@ -1,4 +1,6 @@
-//package piwords;
+package piwords;
+
+import java.sql.SQLOutput;
 
 public class PiGenerator {
     /**
@@ -15,13 +17,13 @@ public class PiGenerator {
     public static int[] computePiInHex(int precision) {
         // TODO: Implement (Problem b)
         if (precision < 0) {
-          return null;
+            return null;
         }
 
         int[] output = new int[precision];
 
         for (int i = 0; i < precision; i++) {
-          output[i] = piDigit(i+1);
+            output[i] = piDigit(i+1);
         }
         return output;
     }
@@ -38,6 +40,7 @@ public class PiGenerator {
      */
     public static int powerMod(int a, int b, int m) {
         // TODO: Implement (Problem a)
+
         if((a < 0 || b < 0) || m <= 0) {
             return -1;
         }
@@ -57,7 +60,7 @@ public class PiGenerator {
 
         n -= 1;
         double x = 4 * piTerm(1, n) - 2 * piTerm(4, n) -
-                   piTerm(5, n) - piTerm(6, n);
+                piTerm(5, n) - piTerm(6, n);
         x = x - Math.floor(x);
 
         return (int)(x * 16);
