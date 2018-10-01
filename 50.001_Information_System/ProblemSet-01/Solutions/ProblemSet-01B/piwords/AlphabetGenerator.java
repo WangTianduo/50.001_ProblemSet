@@ -51,55 +51,34 @@ public class AlphabetGenerator {
      * @return A char[] that maps every digit of the base to a char that the
      *         digit should be translated into.
      */
-    public static char[] generateFrequencyAlphabet(int base,
-                                                   String[] trainingData) {
-        // TODO: Implement (Problem f)
-    	if (base<0)return null;
-        if(base == 0){
-            return new char[0];
-        }
-        Map<Character,Integer> occurence = new HashMap<Character,Integer>();
-        for (String i : trainingData) {
-            char[] charline = i.toCharArray();
-            for (char character: charline) {
-                // Ignore anything that is not a-z
-                if (Character.isLetter(character) && Character.isLowerCase(character)) {
-                    if (occurence.containsKey(character)) {
-                        occurence.put(character, occurence.get(character) + 1);
-                    } else {
-                        occurence.put(character, 1);
-                    }
+
+    public static char[] generateFrequencyAlphabet(int base, String[] trainingData) {
+        if (base < 0) return null;
+        int[] counts = new int[26];
+        int total = 0;
+        for (int i = 0; i < trainingData.length; ++i) {
+            for (int j = 0; j < trainingData[i].length(); ++j) {
+                int charOffset = (int)(trainingData[i].charAt(j)) - 'a';
+                if (charOffset > -1 && charOffset < 26) {
+                    counts[charOffset]++;
+                    total++;
                 }
             }
         }
-
-        Character[] keys = occurence.keySet().toArray(new Character[0]);
-        Arrays.sort(keys);
-        
-        int total = 0;
-        for (char i : keys) {
-            total += occurence.get(i);
+        int[] cdf = new int[26];
+        for (int i = 0; i < cdf.length; ++i) {
+            cdf[i] = (i > 0 ? cdf[i - 1] : 0) + counts[i];
         }
-        
-        Map<Character, Float> cumProbs = new HashMap<Character, Float>();
-        float prior = 0f;
-        for (char i : keys) {
-            float prob = (float) occurence.get(i)/total;
-            cumProbs.put(i, prob + prior);
-            prior = prior + prob;
-        }
-
-
-        // Write the output array
         char[] output = new char[base];
-        int j = 0;
-        for (char i : keys) {
-            int limit = Math.round(cumProbs.get(i) * base)-1;
-            while ((j <= limit) && (j < base)) {
-                output[j] = i;
-                j++;
+        for (int i = 0; i < base; ++i) {
+            for (int j = 0; j < cdf.length; ++j) {
+                if (cdf[j] * base > i * total) {
+                    output[i] = (char)((int)'a' + j);
+                    break;
+                }
             }
         }
         return output;
     }
+    
 }
