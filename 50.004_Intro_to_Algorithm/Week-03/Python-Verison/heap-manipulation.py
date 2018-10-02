@@ -71,7 +71,5 @@ def heap_insert(heap, x):
 sa = [80, 77, 76, 50, 45, 70, 52, 30, 29, 22]
 
 
-print(heap_insert(sa, 100))
-print(heap_check(sa))
-print(sa)
+heap_increase_key(sa, 8, 79)
 	
