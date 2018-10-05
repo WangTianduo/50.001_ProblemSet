@@ -1,0 +1,14 @@
+public class DoubleEachLetter {
+    public static void main (String[] args) {
+        String s = "HelloWorld";
+
+        String output = doubleEachLetter(s);
+        System.out.println("output = " + output);
+    }
+    public static String doubleEachLetter(String s){
+        // Input your codes here
+
+
+
+    }
+}

@@ -1,0 +1,41 @@
+public class CoffeeMaker {
+    private static final int tooCold = 55;
+    private static final int tooHot = 85;
+
+   
+    public void makeCoffee(int temperature) throws TooCold, TooHot {
+        if (temperature <= tooCold) throw new TooCold(temperature);
+        if (temperature >= tooHot) throw new TooHot(temperature);
+        System.out.println("Mmm!");
+    }
+
+   public static void main (String[] args) {
+       CoffeeMaker c = new CoffeeMaker ();
+       int temperature[] = {20,90,60};
+       for (int i = 0; i < 3; i++) {
+       try {
+            c.makeCoffee(temperature[i]);
+        }
+        catch (TooCold ex){
+            // Input your codes here
+
+        }
+        catch (TooHot ex){
+            System.out.println("Ouch! ");
+           // Input your codes here
+
+        }
+       }
+    }
+}
+
+    class TooCold extends Exception {
+      // Input your codes here
+
+
+    }
+
+    class TooHot extends Exception {
+        // Input your codes here
+
+    }
