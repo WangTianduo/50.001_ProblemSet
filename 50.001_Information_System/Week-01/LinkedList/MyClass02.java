@@ -30,6 +30,7 @@ public class MyClass02 {
 
         for (int i=0; i<iter; i++) {
             int idx = (int) ( Math.random() * (limit - 1)) ;
+            // Math.random() returns float number 0-1, include 0 but not 1
 
             String s2 = l.get(idx);
             //l.add(2, "hello");
