@@ -1,0 +1,44 @@
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/nominal.jsim" 
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/stdcell.jsim" 
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab3shifter.jsim"
+
+.subckt shift32 ALUFN[1:0] A[31:0] B[4:0] shift[31:0]
+
+Xlb4u B[4]#16 A[31:16] A[15:0] Wl[31:16] mux2
+Xlb4d B[4]#16 A[15:0] 0#16 Wl[15:0] mux2
+Xlb3u B[3]#24 Wl[31:8] Wl[23:0] Sl[31:8] mux2
+Xlb3d B[3]#8 Wl[7:0] 0#8 Sl[7:0] mux2
+Xlb2u B[2]#28 Sl[31:4] Sl[27:0] Tl[31:4] mux2
+Xlb2d B[2]#4 Sl[3:0] 0#4 Tl[3:0] mux2
+Xlb1u B[1]#30 Tl[31:2] Tl[29:0] Rl[31:2] mux2
+Xlb1d B[1]#2 Tl[1:0] 0#2 Rl[1:0] mux2
+Xlb0u B[0]#31 Rl[31:1] Rl[30:0] Ul[31:1] mux2
+Xlb0d B[0]#1 Rl[0] 0 Ul[0] mux2
+
+
+Xrb4u B[4]#16 A[31:16] 0#16 Wr[31:16] mux2
+Xrb4d B[4]#16 A[15:0] A[31:16] Wr[15:0] mux2
+Xrb3u B[3]#8 Wr[31:24] 0#8 Sr[31:24] mux2
+Xrb3d B[3]#24 Wr[23:0] Wr[31:8] Sr[23:0] mux2
+Xrb2u B[2]#4 Sr[31:28] 0#4 Tr[31:28] mux2
+Xrb2d B[2]#28 Sr[27:0] Sr[31:4] Tr[27:0] mux2
+Xrb1u B[1]#2 Tr[31:30] 0#2 Rr[31:30] mux2
+Xrb1d B[1]#30 Tr[29:0] Tr[31:2] Rr[29:0] mux2
+Xrb0u B[0]#1 Rr[31] 0 Ur[31] mux2
+Xrb0d B[0]#31 Rr[30:0] Rr[31:1] Ur[30:0] mux2
+
+
+Xrsb4u B[4]#16 A[31:16] A[31]#16 Wrs[31:16] mux2
+Xrsb4d B[4]#16 A[15:0] A[31:16] Wrs[15:0] mux2
+Xrsb3u B[3]#8 Wrs[31:24] Wrs[31]#8 Srs[31:24] mux2
+Xrsb3d B[3]#24 Wrs[23:0] Wrs[31:8] Srs[23:0] mux2
+Xrsb2u B[2]#4 Srs[31:28] Srs[31]#4 Trs[31:28] mux2
+Xrsb2d B[2]#28 Srs[27:0] Srs[31:4] Trs[27:0] mux2
+Xrsb1u B[1]#2 Trs[31:30] Trs[31]#2 Rrs[31:30] mux2
+Xrsb1d B[1]#30 Trs[29:0] Trs[31:2] Rrs[29:0] mux2
+Xrsb0u B[0]#1 Rrs[31] Rrs[31] Urs[31] mux2
+Xrsb0d B[0]#31 Rrs[30:0] Rrs[31:1] Urs[30:0] mux2
+
+Xmux4 ALUFN[0]#32 ALUFN[1]#32 UL[31:0] Ur[31:0] 0#32 Urs[31:0] shift[31:0] mux4
+
+.ends

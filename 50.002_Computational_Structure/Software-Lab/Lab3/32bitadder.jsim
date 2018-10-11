@@ -1,0 +1,69 @@
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/nominal.jsim" 
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/stdcell.jsim" 
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab3adder.jsim"
+
+.subckt FA a b ci s co
+XNand1 a b x xor2
+Xnand2 a b y nand2
+Xnand3 x ci z nand2
+Xnand4 x ci s xor2
+XXor1 y z co nand2
+.ends
+
+.subckt adder32 ALUFN[0] A[31:0] B[31:0] S[31:0] z v n
+
+XXor B[31:0] ALUFN0#32 XB[31:0] xor2
+XFA1 A0 XB0 ALUFN0 S0 C0 FA 
+XFA2 A[31:1] XB[31:1] C[30:0] S[31:1] C[31:1] FA
+
+*Zero
+XORSTAGE1 S[7:0] S[15:8] S[23:16] S[31:24] P[7:0] or4
+XORSTAGE2 P[1:0] P[3:2] P[5:4] P[7:6] Q[1:0] or4
+XORSTAGE3 Q1 Q0 z nor2
+
+*Negative
+.connect S[31] n
+
+*Overflow
+XINV1 S[31] s31inv inverter_2
+XINV2 A[31] a31inv inverter_2
+XINV3 XB[31] xb31inv inverter_2
+XAND1 A[31] XB[31] s31inv posoverflow and3
+XAND2 a31inv xb31inv s31 negoverflow and3
+XOR1  posoverflow negoverflow v or2
+.ends
+
+
+.subckt compare32 ALUFN[2:1] z v n cmp[31:0]
+Xless v l less xor2
+Xlessequal z lessequal or2
+Xid ALUFN[1] ALUFN[2] 0 z less lessequal lsb mux4
+.connect cmp[31:1] 0
+.connect cmp[0] lsb
+.ends
+
+
+.subckt boole32 ALUFN[3:0] A[31:0] B[31:0] boole[31:0]
+Xmux A[31:0] B[31:0] ALUFN[0]#32 ALUFN[1]#32 ALUFN[2]#32 ALUFN[3]#32 boole[31:0] mux4
+.ends
+
+
+.subckt shift32 ALUFN[1:0] A[31:0] B[4:0] shift[31:0]
+XB4 B[4] A[31:0] A[15:0] 0#16 W[31:0] mux2
+XB3 B[3] W[31:0] W[23:0] 0#8 X[31:0] mux2
+XB2 B[2] X[31:0] X[27:0] 0#4 Y[31:0] mux2
+XB1 B[1] Y[31:0] Y[29:0] 0#2 Z[31:0] mux2
+XB0 B[1] Z[31:0] Z[31:0] 0 shift[31:0] mux2
+.ends
+
+.subckt alu ALUFN[5:0] A[31:0] B[31:0] alu[31:0] z v n
+Xadder ALUFN[0] A[31:0] B[31:0] adder[31:0] z v n adder32
+Xboole ALUFN[3:0] A[31:0] B[31:0] boole[31:0] boole32
+Xshift ALUFN[1:0] A[31:0] B[4:0] shift[31:0] shift32
+Xcmp ALUFN[2:1] z v n cmp[31:0] compare32
+Xmux ALUFN[4]#32 ALUFN[5]#32 adder[31:0] boole[31:0] shift[31:0] cmp[31:0] alu[31:0] mux4
+.ends
+
+
+
+

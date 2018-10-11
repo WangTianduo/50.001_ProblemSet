@@ -1,0 +1,16 @@
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/nominal.jsim"
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/stdcell.jsim"
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab3compare.jsim"
+
+.subckt compare32 ALUFN[2:1] z v n cmp[31:0]
+*Xless v l less xor2
+*Xlessequal z lessequal or2
+*Xid ALUFN[1] ALUFN[2] 0 z less lessequal lsb mux4
+
+.connect z equal inverter
+Xless v n less xor2
+Xlessequal z less lessequal or2
+Xid ALUFN[1] ALUFN[2] 0 equal less lessequal lsb mux4
+.connect cmp[31:1] 0
+.connect cmp[0] lsb
+.ends
