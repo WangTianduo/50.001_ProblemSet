@@ -1,0 +1,265 @@
+.include "50002/nominal.jsim"
+.include "50002/stdcell.jsim"
+.include "50002/lab3checkoff_10.jsim"
+
+
+.subckt or16 IN[15:0] out
+	Xnor4_0 IN0 IN1 IN2 IN3 z0 nor4
+	Xnor4_1 IN4 IN5 IN6 IN7 z1 nor4
+	Xnor4_2 IN8 IN9 IN10 IN11 z2 nor4
+	Xnor4_3 IN12 IN13 IN14 IN15 z3 nor4
+	Xnand4 z0 z1 z2 z3 out nand4
+.ends
+
+
+.subckt nor32 IN[31:0] out
+	Xor16_0 IN[15:0] z0 or16
+	Xor16_1 IN[31:16] z1 or16
+	Xor z0 z1 out nor2
+.ends
+
+
+.subckt produceV A B S v
+	XinvA A nA inverter
+	XinvB B nB inverter
+	XinvS S nS inverter
+	Xnand3_0 A B nS z0 nand3
+	Xnand3_1 nA nB S z1 nand3
+	Xout_v z0 z1 v nand2
+.ends
+
+
+.subckt carryForward4 Cin C[3:0] G[3:0] P[3:0] Gout Pout
+
+	.connect C0 Cin
+
+	X0_0 G0 L0_0 inverter
+	X0_1 P0 C0 L0_1 nand2
+	X0_out L0_0 L0_1 C1 nand2
+
+	X1_0 G1 L1_0 inverter
+	X1_1 P1 G0 L1_1 nand2
+	X1_2 P1 P0 C0 L1_2 nand3
+	X1_out L1_0 L1_1 L1_2 C2 nand3
+
+	X2_0 G2 L2_0 inverter
+	X2_1 P2 G1 L2_1 nand2
+	X2_2 P2 P1 G0 L2_2 nand3
+	X2_3 P2 P1 P0 C0 L2_3 nand4
+	X2_out L2_0 L2_1 L2_2 L2_3 C3 nand4
+
+	X3_0 G3 L3_0 inverter
+	X3_1 P3 G2 L3_1 nand2
+	X3_2 P3 P2 G1 L3_2 nand3
+	X3_3 P3 P2 P1 G0 L3_3 nand4
+	XGout L3_0 L3_1 L3_2 L3_3 Gout nand4
+	XnP P0 P1 P2 P3 L3_4 nand4
+	XPout L3_4 Pout inverter
+.ends
+
+
+.subckt adder1 Cin A B S G P
+	Xop1 A B P xor2
+	Xop2 A B L nand2
+	Xop3 L G inverter
+	Xop4 Cin P S xor2
+.ends
+
+
+.subckt adder4 Cin A[3:0] B[3:0] S[3:0] Gout Pout
+	Xcarryer Cin C[3:0] G[3:0] P[3:0] Gout Pout carryForward4
+	Xadders C[3:0] A[3:0] B[3:0] S[3:0] G[3:0] P[3:0] adder1
+.ends
+
+
+.subckt adder16 Cin A[15:0] B[15:0] S[15:0] Gout Pout
+
+	Xcarrier Cin C[3:0] G[3:0] P[3:0] Gout Pout carryForward4
+
+	Xadder0 C0 A[3:0] B[3:0] S[3:0] G0 P0 adder4
+	Xadder1 C1 A[7:4] B[7:4] S[7:4] G1 P1 adder4
+	Xadder2 C2 A[11:8] B[11:8] S[11:8] G2 P2 adder4
+	Xadder3 C3 A[15:12] B[15:12] S[15:12] G3 P3 adder4
+.ends
+
+
+.subckt adder32 ALUFN[0] XA[31:0] B[31:0] s[31:0] z v n
+
+	XBxor ALUFN0#32 B[31:0] XB[31:0] xor2
+
+	Xcarrier ALUFN0 C[3:0] G[3:0] P[3:0] Gout Pout carryForward4
+	Xadder0 C0 XA[15:0] XB[15:0] s[15:0] G0 P0 adder16
+	Xadder1 C1 XA[31:16] XB[31:16] s[31:16] G1 P1 adder16
+	Xgnd1 G[3:2] constant0
+	Xgnd2 P[3:2] constant0
+
+	*Xadder0 ALUFN0 XA0 XB0 s0 C0 adder1
+	*Xadders C[30:0] XA[31:1] XB[31:1] s[31:1] C[31:1] adder1
+
+	Xout_z s[31:0] z nor32
+
+	Xout_v XA31 XB31 s31 v produceV
+
+	.connect n s31
+.ends
+
+
+.subckt partialProduct P A B Cin Cout Pout
+	Xop0 A B IN0 and2
+	Xop1 IN0 P Z1 xor2
+	Xop2 IN0 P Z2 nand2
+	Xop3 Z1 Cin Pout xor2
+	Xop4 Z1 Cin Z3 nand2
+	Xop5 Z2 Z3 Cout nand2
+.ends
+
+
+.subckt multiply32 A[31:0] B[31:0] M[31:0]
+	Xrow0 A[31:0] B0#32 P0_[31:0] and2
+
+	.connect P0_0 M0
+	Xrow1 P0_[31:1] A[30:0] B1#31 C1_[30:0] C1_[31:1] P1_[30:0] partialProduct
+	.connect C1_0 0
+	.connect P1_0 M1
+	Xrow2 P1_[30:1] A[29:0] B2#30 C2_[29:0] C2_[30:1] P2_[29:0] partialProduct
+	.connect C2_0 0
+	.connect P2_0 M2
+	Xrow3 P2_[29:1] A[28:0] B3#29 C3_[28:0] C3_[29:1] P3_[28:0] partialProduct
+	.connect C3_0 0
+	.connect P3_0 M3
+	Xrow4 P3_[28:1] A[27:0] B4#28 C4_[27:0] C4_[28:1] P4_[27:0] partialProduct
+	.connect C4_0 0
+	.connect P4_0 M4
+	Xrow5 P4_[27:1] A[26:0] B5#27 C5_[26:0] C5_[27:1] P5_[26:0] partialProduct
+	.connect C5_0 0
+	.connect P5_0 M5
+	Xrow6 P5_[26:1] A[25:0] B6#26 C6_[25:0] C6_[26:1] P6_[25:0] partialProduct
+	.connect C6_0 0
+	.connect P6_0 M6
+	Xrow7 P6_[25:1] A[24:0] B7#25 C7_[24:0] C7_[25:1] P7_[24:0] partialProduct
+	.connect C7_0 0
+	.connect P7_0 M7
+	Xrow8 P7_[24:1] A[23:0] B8#24 C8_[23:0] C8_[24:1] P8_[23:0] partialProduct
+	.connect C8_0 0
+	.connect P8_0 M8
+	Xrow9 P8_[23:1] A[22:0] B9#23 C9_[22:0] C9_[23:1] P9_[22:0] partialProduct
+	.connect C9_0 0
+	.connect P9_0 M9
+	Xrow10 P9_[22:1] A[21:0] B10#22 C10_[21:0] C10_[22:1] P10_[21:0] partialProduct
+	.connect C10_0 0
+	.connect P10_0 M10
+	Xrow11 P10_[21:1] A[20:0] B11#21 C11_[20:0] C11_[21:1] P11_[20:0] partialProduct
+	.connect C11_0 0
+	.connect P11_0 M11
+	Xrow12 P11_[20:1] A[19:0] B12#20 C12_[19:0] C12_[20:1] P12_[19:0] partialProduct
+	.connect C12_0 0
+	.connect P12_0 M12
+	Xrow13 P12_[19:1] A[18:0] B13#19 C13_[18:0] C13_[19:1] P13_[18:0] partialProduct
+	.connect C13_0 0
+	.connect P13_0 M13
+	Xrow14 P13_[18:1] A[17:0] B14#18 C14_[17:0] C14_[18:1] P14_[17:0] partialProduct
+	.connect C14_0 0
+	.connect P14_0 M14
+	Xrow15 P14_[17:1] A[16:0] B15#17 C15_[16:0] C15_[17:1] P15_[16:0] partialProduct
+	.connect C15_0 0
+	.connect P15_0 M15
+	Xrow16 P15_[16:1] A[15:0] B16#16 C16_[15:0] C16_[16:1] P16_[15:0] partialProduct
+	.connect C16_0 0
+	.connect P16_0 M16
+	Xrow17 P16_[15:1] A[14:0] B17#15 C17_[14:0] C17_[15:1] P17_[14:0] partialProduct
+	.connect C17_0 0
+	.connect P17_0 M17
+	Xrow18 P17_[14:1] A[13:0] B18#14 C18_[13:0] C18_[14:1] P18_[13:0] partialProduct
+	.connect C18_0 0
+	.connect P18_0 M18
+	Xrow19 P18_[13:1] A[12:0] B19#13 C19_[12:0] C19_[13:1] P19_[12:0] partialProduct
+	.connect C19_0 0
+	.connect P19_0 M19
+	Xrow20 P19_[12:1] A[11:0] B20#12 C20_[11:0] C20_[12:1] P20_[11:0] partialProduct
+	.connect C20_0 0
+	.connect P20_0 M20
+	Xrow21 P20_[11:1] A[10:0] B21#11 C21_[10:0] C21_[11:1] P21_[10:0] partialProduct
+	.connect C21_0 0
+	.connect P21_0 M21
+	Xrow22 P21_[10:1] A[9:0] B22#10 C22_[9:0] C22_[10:1] P22_[9:0] partialProduct
+	.connect C22_0 0
+	.connect P22_0 M22
+	Xrow23 P22_[9:1] A[8:0] B23#9 C23_[8:0] C23_[9:1] P23_[8:0] partialProduct
+	.connect C23_0 0
+	.connect P23_0 M23
+	Xrow24 P23_[8:1] A[7:0] B24#8 C24_[7:0] C24_[8:1] P24_[7:0] partialProduct
+	.connect C24_0 0
+	.connect P24_0 M24
+	Xrow25 P24_[7:1] A[6:0] B25#7 C25_[6:0] C25_[7:1] P25_[6:0] partialProduct
+	.connect C25_0 0
+	.connect P25_0 M25
+	Xrow26 P25_[6:1] A[5:0] B26#6 C26_[5:0] C26_[6:1] P26_[5:0] partialProduct
+	.connect C26_0 0
+	.connect P26_0 M26
+	Xrow27 P26_[5:1] A[4:0] B27#5 C27_[4:0] C27_[5:1] P27_[4:0] partialProduct
+	.connect C27_0 0
+	.connect P27_0 M27
+	Xrow28 P27_[4:1] A[3:0] B28#4 C28_[3:0] C28_[4:1] P28_[3:0] partialProduct
+	.connect C28_0 0
+	.connect P28_0 M28
+	Xrow29 P28_[3:1] A[2:0] B29#3 C29_[2:0] C29_[3:1] P29_[2:0] partialProduct
+	.connect C29_0 0
+	.connect P29_0 M29
+	Xrow30 P29_[2:1] A[1:0] B30#2 C30_[1:0] C30_[2:1] P30_[1:0] partialProduct
+	.connect C30_0 0
+	.connect P30_0 M30
+	Xrow31 P30_1 A0 B31 0 C31_1 M31 partialProduct
+.ends
+
+
+.subckt compare32 ALUFN[2:1] z v n cmp[31:0]
+	Xgnd cmp[31:1] constant0
+	XnvXor n v y xor2
+	Xop0 ALUFN1 z L0 nand2
+	Xop1 ALUFN2 y L1 nand2
+	XcmpOut L0 L1 cmp0 nand2
+.ends
+
+
+.subckt boole32 ALUFN[3:0] A[31:0] B[31:0] boole[31:0]
+	Xmultiplexers A[31:0] B[31:0] ALUFN0#32 ALUFN1#32 ALUFN2#32 ALUFN3#32 boole[31:0] mux4
+.ends
+
+
+.subckt shift32 ALUFN[1:0] A[31:0] B[4:0] shift[31:0]
+	XfillChoose ALUFN1 0 A31 fill mux2
+	XreverseIn ALUFN0#32 A[31:0] A[0:31] rA[31:0] mux2
+	Xshift16front B4#16 rA[31:16] rA[15:0] W[31:16] mux2
+	Xshift16back B4#16 rA[15:0] fill#16 W[15:0] mux2
+	Xshift8front B3#24 W[31:8] W[23:0] X[31:8] mux2
+	Xshift8back B3#8 W[7:0] fill#8 X[7:0] mux2
+	Xshift4front B2#28 X[31:4] X[27:0] Y[31:4] mux2
+	Xshift4back B2#4 X[3:0] fill#4 Y[3:0] mux2
+	Xshift2front B1#30 Y[31:2] Y[29:0] Z[31:2] mux2
+	Xshift2back B1#2 Y[1:0] fill#2 Z[1:0] mux2
+	Xshift1front B0#31 Z[31:1] Z[30:0] SL[31:1] mux2
+	Xshift1back B0 Z0 fill SL0 mux2
+	XreverseOut ALUFN0#32 SL[31:0] SL[0:31] shift[31:0] mux2
+.ends
+
+
+.subckt alu ALUFN[5:0] A[31:0] B[31:0] alu[31:0] z v n
+	XadderModule ALUFN0 A[31:0] B[31:0] adder[31:0] z v n adder32
+	XbooleModule ALUFN[3:0] A[31:0] B[31:0] boole[31:0] boole32
+	XshiftModule ALUFN[1:0] A[31:0] B[4:0] shift[31:0] shift32
+	XcmpModule ALUFN[2:1] z v n cmp[31:0] compare32
+	XmultiModule A[31:0] B[31:0] multi[31:0] multiply32
+	XconnectAdderMulti ALUFN1#32 adder[31:0] multi[31:0] adderAndMulti[31:0] mux2
+
+	XaluOut ALUFN4#32 ALUFN5#32 adderAndMulti[31:0] boole[31:0] shift[31:0] cmp[31:0] alu[31:0] mux4
+.ends
+
+
+
+
+
+
+
+
+
+
