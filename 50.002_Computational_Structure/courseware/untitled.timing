@@ -1,0 +1,51 @@
+Timing analysis for untitled at Tue Oct 16 10:04:18 SRET 2018
+
+==================================================================
+
+Worst-case tPDs for top-level combinational paths
+
+  tPD from b0 to z (2.914ns):
+
+    + 0.000ns = 0.000ns b0 [wb#31]
+    + 0.203ns = 0.203ns xadder.xb0 [xadder.xxor#31.xxor2]
+    + 0.053ns = 0.256ns xadder.xadders1#3.nab [xadder.xadders1#3.xnand1.xnand2]
+    + 0.109ns = 0.364ns xadder.cof0 [xadder.xadders1#3.xnand4.xnand3]
+    + 0.053ns = 0.417ns xadder.xadders1#2.nbc [xadder.xadders1#2.xnand3.xnand2]
+    + 0.109ns = 0.526ns xadder.cof1 [xadder.xadders1#2.xnand4.xnand3]
+    + 0.053ns = 0.578ns xadder.xadders1#1.nbc [xadder.xadders1#1.xnand3.xnand2]
+    + 0.109ns = 0.687ns xadder.cof2 [xadder.xadders1#1.xnand4.xnand3]
+    + 0.053ns = 0.739ns xadder.xadders1#0.nbc [xadder.xadders1#0.xnand3.xnand2]
+    + 0.155ns = 0.894ns xadder.cof3 [xadder.xadders1#0.xnand4.xnand3]
+    + 0.233ns = 1.127ns xadder.cof7 [xadder.xmux2.xmux2]
+    + 0.233ns = 1.359ns xadder.cof11 [xadder.xmux3.xmux2]
+    + 0.233ns = 1.592ns xadder.cof15 [xadder.xmux4.xmux2]
+    + 0.233ns = 1.824ns xadder.cof19 [xadder.xmux5.xmux2]
+    + 0.233ns = 2.057ns xadder.cof23 [xadder.xmux6.xmux2]
+    + 0.233ns = 2.289ns xadder.cof27 [xadder.xmux7.xmux2]
+    + 0.196ns = 2.486ns s31 [xadder.xmux8sum#0.xmux2]
+    + 0.139ns = 2.625ns xadder.xz.out17 [xadder.xz.xnor1#0.xnor4]
+    + 0.169ns = 2.794ns xadder.xz.out21 [xadder.xz.xand1#0.xand4]
+    + 0.120ns = 2.914ns z [xadder.xz.xand2.xand2]
+
+  tPD from b0 to v (2.614ns):
+
+    + 0.000ns = 0.000ns b0 [wb#31]
+    + 0.203ns = 0.203ns xadder.xb0 [xadder.xxor#31.xxor2]
+    + 0.053ns = 0.256ns xadder.xadders1#3.nab [xadder.xadders1#3.xnand1.xnand2]
+    + 0.109ns = 0.364ns xadder.cof0 [xadder.xadders1#3.xnand4.xnand3]
+    + 0.053ns = 0.417ns xadder.xadders1#2.nbc [xadder.xadders1#2.xnand3.xnand2]
+    + 0.109ns = 0.526ns xadder.cof1 [xadder.xadders1#2.xnand4.xnand3]
+    + 0.053ns = 0.578ns xadder.xadders1#1.nbc [xadder.xadders1#1.xnand3.xnand2]
+    + 0.109ns = 0.687ns xadder.cof2 [xadder.xadders1#1.xnand4.xnand3]
+    + 0.053ns = 0.739ns xadder.xadders1#0.nbc [xadder.xadders1#0.xnand3.xnand2]
+    + 0.155ns = 0.894ns xadder.cof3 [xadder.xadders1#0.xnand4.xnand3]
+    + 0.233ns = 1.127ns xadder.cof7 [xadder.xmux2.xmux2]
+    + 0.233ns = 1.359ns xadder.cof11 [xadder.xmux3.xmux2]
+    + 0.233ns = 1.592ns xadder.cof15 [xadder.xmux4.xmux2]
+    + 0.233ns = 1.824ns xadder.cof19 [xadder.xmux5.xmux2]
+    + 0.233ns = 2.057ns xadder.cof23 [xadder.xmux6.xmux2]
+    + 0.233ns = 2.289ns xadder.cof27 [xadder.xmux7.xmux2]
+    + 0.196ns = 2.486ns s31 [xadder.xmux8sum#0.xmux2]
+    + 0.032ns = 2.517ns xadder.xv.ns31 [xadder.xv.xnot3.xinverter]
+    + 0.067ns = 2.584ns xadder.xv.abns [xadder.xv.xnand1.xnand3]
+    + 0.030ns = 2.614ns v [xadder.xv.xnand3.xnand2]
