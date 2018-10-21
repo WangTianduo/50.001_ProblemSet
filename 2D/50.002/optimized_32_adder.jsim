@@ -1,0 +1,34 @@
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/nominal.jsim" 
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/stdcell.jsim" 
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/checkoff2d/2dcheckoff_4ns.jsim"
+
+.subckt FA a b ci s co
+XNand1 a b x xor2
+Xnand2 a b y nand2
+Xnand3 x ci z nand2
+Xnand4 x ci s xor2
+XXor1 y z co nand2
+.ends
+
+.subckt adder32 ALUFN[0] A[31:0] B[31:0] S[31:0] z v n
+
+XXor B[31:0] ALUFN0#32 XB[31:0] xor2
+XFA1 A0 XB0 ALUFN0 S0 C0 FA 
+XFA2 A[31:1] XB[31:1] C[30:0] S[31:1] C[31:1] FA
+
+*Zero
+XORSTAGE1 S[7:0] S[15:8] S[23:16] S[31:24] P[7:0] or4
+XORSTAGE2 P[1:0] P[3:2] P[5:4] P[7:6] Q[1:0] or4
+XORSTAGE3 Q1 Q0 z nor2
+
+*Negative
+.connect S[31] n
+
+*Overflow
+XINV1 S[31] s31inv inverter_2
+XINV2 A[31] a31inv inverter_2
+XINV3 XB[31] xb31inv inverter_2
+XAND1 A[31] XB[31] s31inv posoverflow and3
+XAND2 a31inv xb31inv s31 negoverflow and3
+XOR1  posoverflow negoverflow v or2
+.ends
