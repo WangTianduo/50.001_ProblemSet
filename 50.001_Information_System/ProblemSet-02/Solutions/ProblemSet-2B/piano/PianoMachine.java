@@ -96,7 +96,7 @@ public class PianoMachine {
     }
 
     public void shiftDown() {
-        if (this.octave > MAX_OCTAVE_SHIFT) {
+        if (this.octave > -MAX_OCTAVE_SHIFT) {
             this.octave--;
         }
     }
