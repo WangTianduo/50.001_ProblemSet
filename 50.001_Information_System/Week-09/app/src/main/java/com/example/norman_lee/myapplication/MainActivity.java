@@ -42,10 +42,35 @@ public class MainActivity extends AppCompatActivity {
         //TODO 3.13 Get the intent and retrieve the exchange rate passed to it
 
         //TODO 2.1 Use findViewById to get references to the widgets in the layout
+        editTextValue = findViewById(R.id.editTextValue);
+        buttonConvert = findViewById(R.id.buttonConvert);
+        textViewExchangeRate = findViewById(R.id.textViewExchangeRate);
+        textViewResult = findViewById(R.id.textViewResult);
 
         //TODO 2.2 Assign a default exchange rate of 2.95 to the textView
+        //Here are two ways
+        textViewExchangeRate.setText(String.valueOf(ExchangeRate.calculateExchangeRate()));
+        textViewExchangeRate.setText(R.string.default_exchange_rate);
 
         //TODO 2.3 Set up setOnClickListener for the Convert Button
+        buttonConvert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userInput = editTextValue.getText().toString();
+                Log.i(TAG, "user enter " + userInput);
+                if (userInput.equals("")) {
+                    Log.i(TAG, "user enter blank");
+                    Toast.makeText(MainActivity.this,
+                            R.string.warning_balnk_edit_text,
+                            Toast.LENGTH_LONG).show();
+                }else {
+
+                    double result = Double.valueOf(userInput) * ExchangeRate.calculateExchangeRate();
+                    textViewResult.setText(String.valueOf(result));
+                }
+
+            }
+        });
         //TODO 2.4 Display a Toast & Logcat message if the editTextValue widget contains an empty string
         //TODO 2.5 If not, calculate the units of B with the exchange rate and display it
 
