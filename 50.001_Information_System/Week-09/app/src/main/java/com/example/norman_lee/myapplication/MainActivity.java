@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         //TODO 4.6 Retrieve the value using the key, and set a default when there is none
 
         //TODO 3.13 Get the intent and retrieve the exchange rate passed to it
+        Intent intent = getIntent();
+        exchangeRate = intent.getDoubleExtra(SubActivity.INTENT_EXCH_RATE, ExchangeRate.calculateExchangeRate());
 
         //TODO 2.1 Use findViewById to get references to the widgets in the layout
         editTextValue = findViewById(R.id.editTextValue);
@@ -49,8 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO 2.2 Assign a default exchange rate of 2.95 to the textView
         //Here are two ways
-        textViewExchangeRate.setText(String.valueOf(ExchangeRate.calculateExchangeRate()));
-        textViewExchangeRate.setText(R.string.default_exchange_rate);
+//        textViewExchangeRate.setText(String.valueOf(ExchangeRate.calculateExchangeRate()));
+//        textViewExchangeRate.setText(R.string.default_exchange_rate);
+
+        textViewExchangeRate.setText(String.valueOf(exchangeRate));
 
         //TODO 2.3 Set up setOnClickListener for the Convert Button
         buttonConvert.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                 }else {
 
-                    double result = Double.valueOf(userInput) * ExchangeRate.calculateExchangeRate();
+                    double result = Double.valueOf(userInput) * exchangeRate;
                     textViewResult.setText(String.valueOf(result));
                 }
 
