@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 if (userInput.equals("")) {
                     Log.i(TAG, "user enter blank");
                     Toast.makeText(MainActivity.this,
-                            R.string.warning_balnk_edit_text,
+                            R.string.warning_blank_edit_text,
                             Toast.LENGTH_LONG).show();
                 }else {
 
@@ -77,9 +77,16 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO 3.1 Modify the Android Manifest to specify that the parent of SubActivity is MainActivity
         //TODO 3.2 Get a reference to the Set Exchange Rate Button
+        buttonSetExchangeRate = findViewById(R.id.buttonSetExchangeRate);
         //TODO 3.3 Set up setOnClickListener for this
         //TODO 3.4 Write an Explicit Intent to get to SubActivity
-
+        buttonSetExchangeRate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SubActivity.class);
+                startActivity(intent);
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

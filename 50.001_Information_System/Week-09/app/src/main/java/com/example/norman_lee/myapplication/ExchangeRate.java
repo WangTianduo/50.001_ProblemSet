@@ -9,7 +9,11 @@ public class ExchangeRate {
     //TODO 3.9 Calculate the exchange rate
     public static double calculateExchangeRate(String A, String B)
             throws NumberFormatException, ArithmeticException {
-        return 0.0;
+        // NumberFormatException is thrown
+        double valueA = Double.valueOf(A);
+        double valueB = Double.valueOf(B);
+        if (valueB <= 1e-10) throw new ArithmeticException();
+        return valueB / valueA;
     }
 
 

@@ -30,8 +30,33 @@ public class SubActivity extends AppCompatActivity {
         //TODO 4.9 Implement saving to shared preferences for the contents of the EditText widget
 
         //TODO 3.5 Get references to the editText widgets
+        editTextSubValueOfA = findViewById(R.id.editTextSubValueA);
+        editTextSubValueOfB = findViewById(R.id.editTextSubValueB);
+
         //TODO 3.6 Get a reference to the Back To Calculator Button
+        buttonBackToCalculator = findViewById(R.id.buttonBackToCalculator);
         //TODO 3.7 Set up setOnClickListener
+        buttonBackToCalculator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String valueA = editTextSubValueOfA.getText().toString();
+                String valueB = editTextSubValueOfB.getText().toString();
+
+                try {
+                    double exchangeRate = ExchangeRate.calculateExchangeRate(valueA, valueB);
+                    Intent itnt = new Intent(SubActivity.this, MainActivity.class);
+                    itnt.putExtra(INTENT_EXCH_RATE, exchangeRate);
+                    startActivity(itnt);
+                }
+                catch (ArithmeticException e) {
+                    Toast.makeText(SubActivity.this, "Divided by zero", Toast.LENGTH_LONG).show();
+                }catch (NumberFormatException e) {
+                    Toast.makeText(SubActivity.this, R.string.warning_blank_edit_text, Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+        });
         //TODO 3.8 Obtain the values stored in the editTextWidgets
         //TODO 3.9 Calculate the exchange rate --> see the ExchangeRate class
         //TODO 3.10 Set up an explicit intent and pass the exchange rate back to MainActivity
