@@ -1,0 +1,17 @@
+.include /Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/beta.uasm
+.include /Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab5checkoff.uasm
+
+count_bull_cows: | your subroutine must have this name
+PUSH(LP) | standard subroutine entry sequence
+PUSH(BP)
+MOVE(SP, BP)
+… PUSH any registers (besides R0) used by your code …
+… your code here, leave score in R0 …
+… POP saved registers …
+MOVE(BP,SP) | standard subroutine exit sequence
+POP(BP)
+POP(LP)
+RTN()
+
+StackBase: LONG(.+4) | Pointer to bottom of stack
+. = .+0x1000 | Reserve space for stack...
