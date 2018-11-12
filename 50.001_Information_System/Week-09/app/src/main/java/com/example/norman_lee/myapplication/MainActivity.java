@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.mainsharedprefs";
     public static final String RATE_KEY = "Rate_Key";
+    public static final String EXCH_KEY = "Exch_Key";
 
 
     @Override
@@ -37,14 +38,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //TODO 4.5 Get a reference to the sharedPreferences object
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+
         //TODO 4.6 Retrieve the value using the key, and set a default when there is none
+        String rate_text = mPreferences.getString(RATE_KEY, "0.0");
+        String exch_text = mPreferences.getString(EXCH_KEY,
+                String.valueOf(ExchangeRate.calculateExchangeRate()));
 
         //TODO 3.13 Get the intent and retrieve the exchange rate passed to it
         Intent intent = getIntent();
-        exchangeRate = intent.getDoubleExtra(SubActivity.INTENT_EXCH_RATE, ExchangeRate.calculateExchangeRate());
+        exchangeRate = intent.getDoubleExtra(SubActivity.INTENT_EXCH_RATE, Double.valueOf(exch_text));
 
         //TODO 2.1 Use findViewById to get references to the widgets in the layout
         editTextValue = findViewById(R.id.editTextValue);
+        editTextValue.setText(rate_text);
         buttonConvert = findViewById(R.id.buttonConvert);
         textViewExchangeRate = findViewById(R.id.textViewExchangeRate);
         textViewResult = findViewById(R.id.textViewResult);
@@ -131,11 +138,57 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.menu_set_exchange_rate) {
+            //TODO write your intent here
+            Intent intent = new Intent(this, SubActivity.class);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
     //TODO 4.3 override the methods in the Android Activity Lifecycle here
     //TODO 4.4 for each of them, write a suitable string to display in the Logcat
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "OnStart() is executed");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "OnResume() is executed");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG, "OnPause() is executed");
+        SharedPreferences.Editor preferenceEditor = mPreferences.edit();
+        preferenceEditor.putString(RATE_KEY, editTextValue.getText().toString());
+        preferenceEditor.putString(EXCH_KEY, textViewExchangeRate.getText().toString());
+        preferenceEditor.apply();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(TAG, "OnStop() is executed");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "OnDestroy() is executed");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i(TAG, "OnRestart() is executed");
+    }
 
     //TODO 4.7 In onPause, get a reference to the SharedPreferences.Editor object
     //TODO 4.8 store the exchange rate using the putString method with a key
