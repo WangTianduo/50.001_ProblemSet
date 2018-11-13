@@ -1,0 +1,139 @@
+.include /Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/beta.uasm
+.include /Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab5checkoff.uasm
+
+count_bull_cows: | your subroutine must have this name
+
+	PUSH(LP) | standard subroutine entry sequence
+	PUSH(BP)
+	MOVE(SP, BP)
+	|… PUSH any registers (besides R0) used by your code …
+	|… your code here, leave score in R0 …
+	|… POP saved registers …
+	PUSH(R1) | a
+	PUSH(R2) | b
+	PUSH(R3) | bulls
+	PUSH(R4) | cows
+	PUSH(R5) | mask
+	PUSH(R6) | for loop i
+	PUSH(R7) | total loop times
+	PUSH(R8) | store a&mask
+	PUSH(R9) | store b&mask
+	PUSH(R10) | atry
+	PUSH(R11) | btry
+	PUSH(R12) | Const 0xF
+	PUSH(R13) | for loop j
+	PUSH(R14) | btemp
+
+	
+CMOVE(0, R0) 
+LD(BP, -16, R1)
+LD(BP, -12, R2)
+LD(BP, -16, R24)
+LD(BP, -12, R25)
+|CMOVE(0x3474, R1)
+|ADDC(R31, 0x9721, R2)
+CMOVE(0, R3) 
+CMOVE(0, R4) 
+CMOVE(0xF, R5) 
+CMOVE(0, R6) 
+CMOVE(4, R7) 
+CMOVE(0xf, R12)
+
+|******** for1 ***********
+BR(checkfor1)
+for1:
+AND(R1, R5, R8)
+AND(R2, R5, R9)
+
+|####### if1 ###########
+CMPEQ(R8, R9, R0)
+BT(R0, if1, R31)
+BR(ifelse1)
+if1:
+ADDC(R3, 1, R3)
+OR(R1, R5, R1)
+OR(R2, R5, R2)
+ifelse1:
+SHLC(R5, 4, R5)
+|####### if1 ###########
+
+ADDC(R6, 1, R6) | add i to proceed for loop
+checkfor1:
+CMPLT(R6, R7, R0)
+BT(R0, for1, R31)
+
+|******** for1 ***********
+
+CMOVE(0, R6) | reset i
+
+
+|******** for2 ***********
+BR(checkfor2)
+for2:
+AND(R1, R12, R10)
+SHRC(R1, 4, R1)
+CMOVE(0, R13)
+
+|####### if2 ###########
+CMPEQ(R10, R12, R0)
+BF(R0, if2, R31)
+BR(ifelse2)
+if2:
+ADDC(R2, 0, R14)
+CMOVE(0xF, R5)
+
+|**** for3 ****
+BR(checkfor3)
+for3:
+AND(R14, R12, R11)
+SHRC(R14, 4, R14)
+
+|####### if3 #######
+CMPEQ(R10, R11, R0)
+BT(R0, if3, R31)
+BR(ifelse3)
+if3:
+ADDC(R4, 1, R4)
+OR(R2, R5, R2)
+BR(endfor3)
+ifelse3:
+
+|####### if3 #######
+SHLC(R5, 4, R5)
+ADDC(R13, 1, R13)
+checkfor3:
+CMPLT(R13, R7, R0)
+BT(R0, for3, R31)
+endfor3:
+|**** for3 ****
+ifelse2:
+|####### if2 ###########
+
+ADDC(R6, 1, R6)
+checkfor2:
+CMPLT(R6, R7, R0)
+BT(R0, for2, R31)
+|******** for2 ***********
+
+SHLC(R3, 4, R3)
+ADD(R4, R3, R0)
+	POP(R14)
+	POP(R13)
+	POP(R12)
+	POP(R11)
+	POP(R10)
+	POP(R9)
+	POP(R8)
+	POP(R7)
+	POP(R6)
+	POP(R5)
+	POP(R4)
+	POP(R3)
+	POP(R2)
+	POP(R1)
+	MOVE(BP,SP) | standard subroutine exit sequence
+	POP(BP)
+	POP(LP)
+	RTN()
+StackBase: LONG(.+4) | Pointer to bottom of stack
+	. = .+0x1000 | Reserve space for stack...
