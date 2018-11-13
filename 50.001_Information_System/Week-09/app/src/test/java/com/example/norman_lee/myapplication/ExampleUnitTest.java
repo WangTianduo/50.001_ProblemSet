@@ -18,5 +18,19 @@ public class ExampleUnitTest {
 
     //TODO 5.4 Write unit tests to check calculateExchangeRate
 
+    @Test
+    public void exhangeRateDefault() {
+        assertEquals(2.95, ExchangeRate.calculateExchangeRate(), 1e-10);
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void exchangeRate_Infinity() {
+        ExchangeRate.calculateExchangeRate("1.0", "0.0");
+    }
+
+    @Test
+    public void exchangeRate_Correct() {
+        assertEquals(0.2, ExchangeRate.calculateExchangeRate("5.0", "1.0"), 1e-10);
+    }
 
 }

@@ -14,4 +14,10 @@
         android:orderInCategory="110"
         android:title="@string/set_exchange_rate"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_open_map_app"
+        android:orderInCategory="120"
+        android:title="@string/set_exchange_rate"
+        app:showAsAction="never" />
 </menu>

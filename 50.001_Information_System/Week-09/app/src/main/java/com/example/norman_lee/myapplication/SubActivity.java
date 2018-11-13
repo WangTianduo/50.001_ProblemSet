@@ -26,12 +26,17 @@ public class SubActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub);
 
-
         //TODO 4.9 Implement saving to shared preferences for the contents of the EditText widget
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        String Rate_text_A = mPreferences.getString(A_KEY, "");
+        String Rate_text_B = mPreferences.getString(B_KEY, "");
 
         //TODO 3.5 Get references to the editText widgets
         editTextSubValueOfA = findViewById(R.id.editTextSubValueA);
         editTextSubValueOfB = findViewById(R.id.editTextSubValueB);
+
+        editTextSubValueOfA.setText(Rate_text_A);
+        editTextSubValueOfB.setText(Rate_text_B);
 
         //TODO 3.6 Get a reference to the Back To Calculator Button
         buttonBackToCalculator = findViewById(R.id.buttonBackToCalculator);
@@ -67,4 +72,13 @@ public class SubActivity extends AppCompatActivity {
 
     //TODO 4.10 Don't forget to override onPause()
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences.Editor preferenceEditor = mPreferences.edit();
+        preferenceEditor.putString(A_KEY, editTextSubValueOfA.getText().toString());
+        preferenceEditor.putString(B_KEY, editTextSubValueOfB.getText().toString());
+        preferenceEditor.apply();
+    }
 }
