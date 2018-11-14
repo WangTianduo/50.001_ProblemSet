@@ -12,7 +12,7 @@ public class ExchangeRate {
         // NumberFormatException is thrown
         double valueA = Double.valueOf(A);
         double valueB = Double.valueOf(B);
-        if (valueB <= 1e-10) throw new ArithmeticException();
+        if (valueA <= 1e-10) throw new ArithmeticException();
         return valueB / valueA;
     }
 

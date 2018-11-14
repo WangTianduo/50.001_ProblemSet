@@ -9,6 +9,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.*;
 
 /**
@@ -34,7 +39,12 @@ public class ExampleInstrumentedTest {
     }
 
     //TODO 5.5 check that the layout of MainActivity has the required widgets
-
+    @Test
+    public void mainLayoutCorrect() {
+        onView(withId(R.id.editTextValue)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonSetExchangeRate)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonSetExchangeRate)).check(matches(withText(R.string.set_exchange_rate)));
+    }
 
     /* TODO 5.6 For 5 units of A buys 1 unit of B, enter these values in SubActivity and
        TODO 5.6 check that the result 0.2 is displayed in Main activity */
