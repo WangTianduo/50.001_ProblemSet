@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -46,6 +48,14 @@ public class ExampleInstrumentedTest {
         onView(withId(R.id.buttonSetExchangeRate)).check(matches(withText(R.string.set_exchange_rate)));
     }
 
+    //TODO we are going to enter a value in editTextValue and click the converter
+    @Test
+    public void enterValueAndConvert() {
+        onView(withId(R.id.editTextValue)).perform(replaceText("100"));
+        onView(withId(R.id.buttonConvert)).perform(click());
+        onView(withId(R.id.textViewResult)).check(matches(withText("295")));
+
+    }
     /* TODO 5.6 For 5 units of A buys 1 unit of B, enter these values in SubActivity and
        TODO 5.6 check that the result 0.2 is displayed in Main activity */
 
