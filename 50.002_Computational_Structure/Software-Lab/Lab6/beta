@@ -1,0 +1,60 @@
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/nominal.jsim"
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/stdcell.jsim"
+// lab6basicblock
+//.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab6basicblock.jsim"
+// lab6pc
+//.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab6pc.jsim"
+// lab6regfile - done
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab6regfile.jsim"
+// lab6ctl
+//.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab6ctl.jsim"
+
+// def-pc
+.subckt pc clk reset ia[31:0]
+
+Xreset reset#32 node2[31:0] 
+.ends
+
+// def-regfile
+.subckt regfile clk werf ra2sel ra[4:0] rb[4:0] rc[4:0]
++ wdata[31:0] radata[31:0] rbdata[31:0]
+
+Xra2mux ra2sel#5 rb[4:0] rc[4:0] ra2mux[4:0] mux2
+
+Xr31ra1 ra0 ra1 ra2 ra3 z1 and4
+Xr31ra2 ra0 ra4 z2 and2
+Xr31ra3 z1 z2 z3 and2
+Xr31ra4 z3#5 ra[4:0] 0#5 outra[4:0] mux2
+
+Xr31rb1 ra2mux0 ra2mux1 ra2mux2 ra2mux3 z4 and4
+Xr31rb2 ra2mux0 ra2mux4 z5 and2
+Xr31rb3 z4 z5 z6 and2
+Xr31rb4 z6#5 rb[4:0] 0#5 outrb[4:0] mux2
+
+
+//Xr31w1 rc0 rc1 rc2 rc3 z7 and4
+//Xr31w2 rc0 rc4 z8 and2
+//Xr31w3 z7 z8 z9 and2
+//Xr31w4 z9#5 rc[4:0] 0#5 outrc[4:0] mux2
+
+Xregfile 
++ vdd 0 0 outra[4:0] radatatemp[31:0] // A read port
++ vdd 0 0 outrb[4:0] rbdatatemp[31:0] // B read port
++ 0 clk werf rc[4:0] wdata[31:0]      // write port
++ $memory width=32 nlocations=31
+
+Xmuxr31ra z3#32 radatatemp[31:0] 0#32 radata[31:0] mux2
+Xmuxr31rb z6#32 rbdatatemp[31:0] 0#32 rbdata[31:0] mux2
+
+.ends
+
+// def-ctl
+.subckt ctl reset id[31:26] ra2sel bsel alufn[5:0] wdsel[1:0] werf moe wr
+
+.ends
+
+// def-beta
+.subckt beta clk reset ia[31:0] id[31:0] ma[31:0]
++ moe mrd[31:0] wr mwd[31:0]
+
+.ends
