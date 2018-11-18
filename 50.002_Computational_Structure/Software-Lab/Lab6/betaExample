@@ -8,8 +8,8 @@
 //.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab6regfile.jsim"
 // lab6ctl
 //.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab6ctl.jsim"
-//.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/Software-Lab/Lab6/includeALU.jsim"
-.include "/Users/wangtianduo/Desktop/lab6-betacpu/alu.jsim"
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/Software-Lab/Lab6/includeALU.jsim"
+//.include "/Users/wangtianduo/Desktop/lab6-betacpu/alu.jsim"
 
 .subckt FAsub a b ci s co
 XNand1 a b x xor2
@@ -142,26 +142,63 @@ Xreset reset xwr 0 wr mux2
 
 .ends
 
-// def-beta
-.subckt beta clk reset ia[31:0] id[31:0] ma[31:0]
-+ moe mrd[31:0] wr mwd[31:0]
+.subckt beta clk reset
++ ia[31:0] id[31:0] ma[31:0]
++ moe mrd[31:0] wr mwd[31:0] 
 
-//Xconnectcirc1 id[15]#16id[15:0] sext_c[31:0] buffer
-.connect id[15]#16 sext_c[31:16]
-.connect id[15:0] sext_c[15:0]
+    // sext
+    // connect id and cext
+    // xconnectcirc1 sext_c[31:16] id[15]#16 conn
+    // xconnectcirc2 id[15:0] sext_c[15:0] conn
+    xconnectcirc1 id[15]#16 id[15:0] sext_c[31:0] buffer
 
-Xpc clk reset ia[31:0] pc
 
-Xregfile clk werf ra2sel id[20:16] id[15:11] id[25:21]
-+ wdata[31:0] radata[31:0] mwd[31:0] regfile
+    // Components
+    // pc 
+    xpc 
+    + clk 
+    + reset  
+    + ia[31:0]                    
+    + pc
 
-Xctl reset id[31:26] ra2sel bsel alufn[5:0] wdsel[1:0] werf moe wr ctl
 
-Xbsel bsel#32 mwd[31:0] sext_c[31:0] aluBinput[31:0] mux2
+    // ctl
+    xctl reset 
+    + id[31:26]
+    + ra2sel
+    + bsel
+    + alufn[5:0]
+    + wdsel[1:0]
+    + werf
+    + moe
+    + wr
+    + ctl    
 
-Xalu alufn[5:0] radata[31:0] aluBinput[31:0] ma[31:0] z3 v3 n3 alu
 
-Xwdsel wdsel[0]#32 wdsel[1]#32 0#32 ma[31:0] mrd[31:0] 0#32 wdata[31:0] mux4
+    // regfile
+    xregfile clk werf ra2sel
+    + id[20:16] id[15:11] id[25:21]
+    + wdata[31:0]
+    + radata[31:0] 
+    + mwd[31:0]
+    + regfile
 
+    xbsel bsel#32 mwd[31:0] sext_c[31:0] bout[31:0] mux2
+
+
+    // ALU
+    xalu alufn[5:0] radata[31:0] bout[31:0] ma[31:0] alu
+
+    // WDSEL mux
+    xwdselmux 
+    + wdsel[0]#32 
+    + wdsel[1]#32 
+    + 0#32
+    + ma[31:0] 
+    + mrd[31:0]
+    + 0#32 
+    + wdata[31:0]
+    + mux4    
+    
 
 .ends
