@@ -8,9 +8,10 @@
 //.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab6regfile.jsim"
 // lab6ctl
 //.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab6ctl.jsim"
-.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/Software-Lab/Lab6/includeALU.jsim"
+//.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/Software-Lab/Lab6/includeALU.jsim"
+.include "/Users/wangtianduo/Desktop/lab6-betacpu/alu.jsim"
 
-.subckt FA a b ci s co
+.subckt FAsub a b ci s co
 XNand1 a b x xor2
 Xnand2 a b y nand2
 Xnand3 x ci z nand2
@@ -20,8 +21,8 @@ XXor1 y z co nand2
 
 .subckt add4 IN[31:0] OUT[31:0]
 
-Xadd1 IN2 vdd 0 OUT2 C0 FA
-Xadd2 IN[31:3] 0#29 C[28:0] OUT[31:3] C[29:1] FA
+Xadd1 IN2 vdd 0 OUT2 C0 FAsub
+Xadd2 IN[31:3] 0#29 C[28:0] OUT[31:3] C[29:1] FAsub
 .connect 0#2 OUT[1:0] 
 
 .ends
@@ -141,25 +142,51 @@ Xreset reset xwr 0 wr mux2
 
 .ends
 
-// def-beta
-.subckt beta clk reset ia[31:0] id[31:0] ma[31:0]
+.subckt beta clk reset 
++ ia[31:0] id[31:0] ma[31:0]
 + moe mrd[31:0] wr mwd[31:0]
 
-Xconnectcirc1 id[15]#16 id[15:0] sext_c[31:0] buffer
+.connect id[15]#16 sext_c[31:16]
+.connect id[15:0] sext_c[15:0]
 
-Xpc clk reset ia[31:0] pc
+Xpc 
++clk 
++reset 
++ia[31:0] 
++pc
 
-Xregfile clk werf ra2sel id[20:16] id[15:11] id[25:21]
-+ wdata[31:0] radata[31:0] rbdata[31:0] regfile
 
-Xctl reset id[31:26] ra2sel bsel alufn[5:0] wdsel[1:0] werf moe wr ctl
+Xctl reset 
++ id[31:26] 
++ ra2sel 
++ bsel 
++ alufn[5:0] 
++ wdsel[1:0] 
++ werf 
++ moe 
++ wr 
++ ctl
 
-Xbsel bsel#32 rbdata[31:0] sext_c[31:0] aluBinput[31:0] mux2
+Xregfile clk werf ra2sel 
++ id[20:16] id[15:11] id[25:21]
++ wdata[31:0] 
++ radata[31:0] 
++ mwd[31:0] 
++ regfile
 
-Xalu alufn[5:0] radata[31:0] aluBinput[31:0] aluOutput[31:0] z3 v3 n3 alu
+Xbsel bsel#32 mwd[31:0] sext_c[31:0] aluBinput[31:0] mux2
 
-Xwdsel wdsel[0]#32 wdsel[1]#32 0#32 aluOutput[31:0] mrd[31:0] 0#32 wdata[31:0] mux4
+Xalu alufn[5:0] radata[31:0] aluBinput[31:0] ma[31:0] z3 v3 n3 alu
 
-.connect rbdata[31:0] mwd[31:0]
+Xwdsel 
++ wdsel[0]#32 
++ wdsel[1]#32 
++ 0#32 
++ ma[31:0] 
++ mrd[31:0] 
++ 0#32 
++ wdata[31:0] 
++ mux4
+
 
 .ends
