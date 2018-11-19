@@ -144,6 +144,21 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
+
+        if (id == R.id.menu_open_map_app){
+            String location = getString(R.string.default_location);
+            Uri.Builder builder = new Uri.Builder();
+            builder.scheme("geo").opaquePart("0.0").appendQueryParameter("q", location);
+            Uri geoLocation = builder.build();
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(geoLocation);
+
+            if (intent.resolveActivity(getPackageManager()) != null){
+                startActivity(intent);
+            }
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

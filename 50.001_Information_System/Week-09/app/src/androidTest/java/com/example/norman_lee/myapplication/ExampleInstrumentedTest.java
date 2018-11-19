@@ -53,7 +53,7 @@ public class ExampleInstrumentedTest {
     public void enterValueAndConvert() {
         onView(withId(R.id.editTextValue)).perform(replaceText("100"));
         onView(withId(R.id.buttonConvert)).perform(click());
-        onView(withId(R.id.textViewResult)).check(matches(withText("295")));
+        onView(withId(R.id.textViewResult)).check(matches(withText("295.0")));
 
     }
     /* TODO 5.6 For 5 units of A buys 1 unit of B, enter these values in SubActivity and
