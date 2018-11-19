@@ -59,6 +59,17 @@ public class ExampleInstrumentedTest {
     /* TODO 5.6 For 5 units of A buys 1 unit of B, enter these values in SubActivity and
        TODO 5.6 check that the result 0.2 is displayed in Main activity */
 
+    @Test
+    public void checkConversion() {
+        onView(withId(R.id.buttonSetExchangeRate)).perform(click());
+        onView(withId(R.id.editTextSubValueA)).perform(replaceText("5"));
+        onView(withId(R.id.editTextSubValueB)).perform(replaceText("1"));
+        onView(withId(R.id.buttonBackToCalculator)).perform(click());
+        onView(withId(R.id.editTextValue)).perform(replaceText("100"));
+        onView(withId(R.id.buttonConvert)).perform(click());
+        onView(withId(R.id.textViewResult)).check(matches(withText("20.0")));
+
+    }
 
     /* TODO 5.7 If 0 is entered in the editTextSubValueA in SubActivity
        TODO 5.7 check that textViewExchangeRate is not displayed when button is clicked
