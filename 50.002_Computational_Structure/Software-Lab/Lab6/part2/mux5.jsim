@@ -1,0 +1,7 @@
+* a = 000; b = 001; c = 010; d = 011; e = 100
+.subckt mux5 ctl[2:0] a b c d e out 
+
+Xmux4 ct[0] ct[1] a b c d mux4out mux4
+Xmux2 ct[2] mux4out e out 
+
+.ends 

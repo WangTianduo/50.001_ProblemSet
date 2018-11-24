@@ -1,0 +1,57 @@
+
+.subckt FAsub a b ci s co
+    XNand1 a b x xor2
+    Xnand2 a b y nand2
+    Xnand3 x ci z nand2
+    Xnand4 x ci s xor2 
+    XXor1 y z co nand2
+.ends
+
+.subckt add4 IN[31:0] OUT[31:0]
+
+    Xadd1 IN2 vdd 0 OUT2 C0 FAsub
+    Xadd2 IN[31:3] 0#29 C[28:0] OUT[31:3] C[29:1] FAsub
+    .connect 0#2 OUT[1:0] 
+.ends
+
+.subckt adder32 ALUFN[0] A[31:0] B[31:0] S[31:0] z v n
+
+    XXor B[31:0] ALUFN0#32 XB[31:0] xor2
+    XFA1 A0 XB0 ALUFN0 S0 C0 FA 
+    XFA2 A[31:1] XB[31:1] C[30:0] S[31:1] C[31:1] FA
+
+    *Zero
+    XORSTAGE1 S[7:0] S[15:8] S[23:16] S[31:24] P[7:0] or4
+    XORSTAGE2 P[1:0] P[3:2] P[5:4] P[7:6] Q[1:0] or4
+    XORSTAGE3 Q1 Q0 z nor2
+
+    *Negative
+    .connect S[31] n
+
+    *Overflow
+    XINV1 S[31] s31inv inverter_2
+    XINV2 A[31] a31inv inverter_2
+    XINV3 XB[31] xb31inv inverter_2
+    XAND1 A[31] XB[31] s31inv posoverflow and3
+    XAND2 a31inv xb31inv s31 negoverflow and3
+    XOR1  posoverflow negoverflow v or2
+.ends
+
+
+.subckt pc clk reset pcsel[2:0] 
++ xaddr[31:0] illop[31:0] jt[31:0] sext_c[31:0] 
++ ia[31:0] ia_inc[31:0] addc[31:0] 
+
+    Xadd4 ia[31:0] ia_inc[31:0] add4
+    Xplusc 0 sext_c[29:0] 0#2 ia_inc[31:0] addc[31:0] z v n adder32
+    Xand ia[31] jt[31] newpc31 and2
+
+    Xmux5 pcsel[0]#32 pcsel[1]#32 pcsel[2]#32 
+    + ia_inc[31:0] addc[31:0] newpc31 jt[30:2] 0#2 illop[31:0] xaddr[31:0] 
+    + node1[31:0] mux5
+
+    Xreset reset#32 node1[31:0] vdd 0#31 node2[31:0] mux2
+
+    Xdreg node2[31:0] clk#32 ia[31:0] dreg
+
+.ends

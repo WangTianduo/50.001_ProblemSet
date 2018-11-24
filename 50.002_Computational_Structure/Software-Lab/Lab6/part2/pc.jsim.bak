@@ -1,0 +1,23 @@
+
+.subckt FAsub a b ci s co
+XNand1 a b x xor2
+Xnand2 a b y nand2
+Xnand3 x ci z nand2
+Xnand4 x ci s xor2
+XXor1 y z co nand2
+.ends
+
+.subckt add4 IN[31:0] OUT[31:0]
+
+Xadd1 IN2 vdd 0 OUT2 C0 FAsub
+Xadd2 IN[31:3] 0#29 C[28:0] OUT[31:3] C[29:1] FAsub
+.connect 0#2 OUT[1:0] 
+
+.ends
+// def-pc
+.subckt pc clk reset ia[31:0]
+
+Xreset reset#32 node2[31:0] 0#32 node1[31:0] mux2
+Xid node1[31:0] clk#32 ia[31:0] dreg
+Xic ia[31:0] node2[31:0] add4
+.ends
