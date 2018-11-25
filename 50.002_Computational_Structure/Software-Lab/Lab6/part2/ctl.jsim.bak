@@ -79,10 +79,9 @@ Xbr1 id[31:28] 0 vdd#3 BR[3:0] xnor2
 Xcheck2 id[27:26] checkb xor2
 Xbr2 BR[3:0] checkb and5
 Xinv z zinv inverter_2
+// BEQ: id[27] = 0; BNE: id[27] = 1
 XmuxZ id[27] z zinv pcsel_branch mux2
 
 XmuxBr branch#3 xpcsel[2:0] 0 0 pcsel_branch pcsel[2:0] mux2
-
-Xpcsel 
 
 .ends

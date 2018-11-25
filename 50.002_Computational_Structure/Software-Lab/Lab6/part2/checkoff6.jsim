@@ -5,10 +5,79 @@
 .include "pc.jsim"
 .include "regfile"
 .include "ctl.jsim"
+.include "/Users/wangtianduo/Desktop/lab6-betacpu/alu.jsim"
 
 .subckt beta clk reset irq ia[31:0] id[31:0] ma[31:0]
 + moe mrd[31:0] wr mwd[31:0]
 
+Xsext id[15]#16 id[15:0] sext_c[31:0] buffer
+
+Xz radata[31:0] z zzero
+
+Xpc 
++ clk 
++ reset 
++ pcsel[2:0]
++ vdd 0#27 vdd 0#3 // xaddr
++ vdd 0#28 vdd 0#2 // illop 
++ radata[31:0] //jt[31:0] 
++ sext_c[31:0] 
++ ia[31:0] 
++ ia_inc[31:0] 
++ addc[31:0] pc
+
+Xctl 
++ reset 
++ z 
++ id[31:26] 
++ ra2sel 
++ bsel 
++ alufn[5:0] 
++ xwdsel[1:0] 
++ xwerf 
++ moe 
++ xwr 
++ xpcsel[2:0]
++ asel 
++ xwasel
++ ctl
+
+Xregfile
++ clk
++ werf
++ ra2sel
++ wasel
++ id[20:16]
++ id[15:11]
++ id[25:21]
++ wdata[31:0]
++ radata[31:0]
++ mwd[31:0]
++ regfile
+
+Xasel asel#32 radata[31:0] 0 addc[30:0] aluA[31:0] mux2
+
+Xbsel bsel#32 mwd[31:0] sext_c[31:0] aluB[31:0] mux2
+
+Xalu 
++ alufn[5:0]
++ aluA[31:0]
++ aluB[31:0]
++ ma[31:0]
++ z3 v3 n3 
++ alu
+
+Xwdsel wdsel[0]#32 wdsel[1]#32 
++ ia_inc[31:0] ma[31:0] mrd[31:0] 0#32 
++ wdata[31:0] mux4
+
+Xinv ia[31] usermode inverter
+Xl1 irq usermode toi and2
+Xl2 toi xwasel vdd wasel mux2
+Xl3 toi xwerf vdd werf mux2
+Xl4 toi#2 xwdsel[1:0] 0#2 wdsel[1:0] mux2
+Xl5 toi xwr 0 wr mux2
+Xl6 toi#3 xpcsel[2:0] vdd 0#2 pcsel[2:0] mux2 
 
 
 .ends

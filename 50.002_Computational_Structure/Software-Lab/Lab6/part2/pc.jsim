@@ -46,9 +46,19 @@
     Xplusc 0 sext_c[29:0] 0#2 ia_inc[31:0] addc[31:0] z v n adder32
     Xand ia[31] jt[31] newpc31 and2
 
-    Xmux5 pcsel[0]#32 pcsel[1]#32 pcsel[2]#32 
-    + ia_inc[31:0] addc[31:0] newpc31 jt[30:2] 0#2 illop[31:0] xaddr[31:0] 
-    + node1[31:0] mux5
+    //Xmux5 pcsel[0]#32 pcsel[1]#32 pcsel[2]#32 
+    //+ ia_inc[31:0] addc[31:0] newpc31 jt[30:2] 0#2 illop[31:0] xaddr[31:0] 
+    //+ node1[31:0] mux5
+    xpcsel1 pcsel[0]#32 pcsel[1]#32 
+    + ia_inc[31:0] 
+    + addc[31:0] 
+    + newpc31 jt[30:2] 0#2  
+    + illop[31:0] 
+    + pctemp[31:0]
+    + mux4
+
+    xpcsel2 pcsel[2]#32 pctemp[31:0] xaddr[31:0] node1[31:0] mux2
+
 
     Xreset reset#32 node1[31:0] vdd 0#31 node2[31:0] mux2
 

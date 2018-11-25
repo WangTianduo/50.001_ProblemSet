@@ -1,8 +1,16 @@
-.subckt ctl reset z 
-+ id[31:26] ra2sel bsel 
-+ alufn[5:0] wdsel[1:0] 
-+ werf moe wr pcsel[2:0]
-+ asel wasel
+.subckt ctl 
++ reset z 
++ id[31:26] 
++ ra2sel 
++ bsel 
++ alufn[5:0] 
++ wdsel[1:0] 
++ werf 
++ moe 
++ wr 
++ pcsel[2:0]
++ asel 
++ wasel
 
 Xctl vdd 0 0 id[31:26] // one read port
 + tpcsel[2:0] wasel asel ra2sel bsel alufn[5:0] wdsel[1:0] werf moe xwr
@@ -77,11 +85,11 @@ Xmux reset xwr 0 wr mux2
 
 Xbr1 id[31:28] 0 vdd#3 BR[3:0] xnor2
 Xcheck2 id[27:26] checkb xor2
-Xbr2 BR[3:0] checkb and5
+Xbr2 BR[3:0] checkb  br and5
 Xinv z zinv inverter_2
 // BEQ: id[27] = 0; BNE: id[27] = 1
 XmuxZ id[27] z zinv pcsel_branch mux2
 
-XmuxBr branch#3 xpcsel[2:0] 0 0 pcsel_branch pcsel[2:0] mux2
+XmuxBr br#3 tpcsel[2:0] 0 0 pcsel_branch pcsel[2:0] mux2
 
 .ends

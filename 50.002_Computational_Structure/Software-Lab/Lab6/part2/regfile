@@ -1,5 +1,5 @@
 .subckt regfile clk werf ra2sel wasel ra[4:0] rb[4:0] rc[4:0]
-+ wdata[31:0] radata[31:0] rbdata[31:0] jt[31:0] z
++ wdata[31:0] radata[31:0] rbdata[31:0]
 
     Xra2mux ra2sel#5 rb[4:0] rc[4:0] ra2mux[4:0] mux2
     Xwasel wasel#5 rc[4:0] vdd#4 0 waddr[4:0] mux2
@@ -18,10 +18,6 @@
 
     xtoradata outA#32 adata[31:0] 0#32 radata[31:0] mux2
     xtorbdata outB#32 bdata[31:0] 0#32 rbdata[31:0] mux2
-
-    .connect radata[31:0] jt[31:0]
-
-    Xgetz radata[31:0] z zzero
 
 .ends
 
