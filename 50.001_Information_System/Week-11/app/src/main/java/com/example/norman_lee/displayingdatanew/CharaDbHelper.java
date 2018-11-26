@@ -139,7 +139,13 @@ public class CharaDbHelper extends SQLiteOpenHelper {
     //TODO 7.9 queryOneRow gets the entire database and returns the row in position as a CharaData object
     public CharaData queryOneRow(int position){
 
-        return new CharaData("","","");
+        if (readableDb == null) {
+            readableDb = getReadableDatabase();
+        }
+
+        Cursor cursor = readableDb.rawQuery(CharaContract.CharaSql.SQL_QUERY_ALL_ROWS, null);
+
+        return getDataFromCursor(position, cursor);
 
     }
 
@@ -168,13 +174,36 @@ public class CharaDbHelper extends SQLiteOpenHelper {
 
     //TODO 7.10 Insert one row when data is passed to it
     public void insertOneRow(CharaData charaData){
+        if (writeableDb == null) {
+            writeableDb = getWritableDatabase();
+        }
 
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CharaContract.CharaEntry.COL_NAME, charaData.getName());
+        contentValues.put(CharaContract.CharaEntry.COL_DESCRIPTION, charaData.getDescription());
+        byte[] bitmapData = Utils.convertBitmapToByteArray(charaData.getBitmap());
+        contentValues.put(CharaContract.CharaEntry.COL_FILE, bitmapData);
+
+        long row = writeableDb.insert(CharaContract.CharaEntry.TABLE_NAME, null, contentValues);
+        Log.i("Logcat", "insertOneRow: row = " + row);
     }
 
 
     //TODO 7.11 Delete one row given the name field
     public int deleteOneRow(String name){
-        return 0;
+        if (writeableDb == null) {
+            writeableDb = getWritableDatabase();
+        }
+
+        String WHERE_CLAUSE = CharaContract.CharaEntry.COL_NAME + " = ?";
+        String[] WHERE_ARGS = {name};
+        int rowsDeleted = writeableDb.delete(
+                CharaContract.CharaEntry.TABLE_NAME,
+                WHERE_CLAUSE,
+                WHERE_ARGS
+        );
+        
+        return rowsDeleted;
     }
 
     //TODO 7.7 return the number of rows in the database

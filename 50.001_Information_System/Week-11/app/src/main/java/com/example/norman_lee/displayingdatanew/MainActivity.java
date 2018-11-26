@@ -42,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO 7.13 test the methods you wrote
         TestCharaDbHelper.testQueryOneRowRandom(charaDbHelper);
+        TestCharaDbHelper.testTable(charaDbHelper);
+        TestCharaDbHelper.testInsertOneRow(charaDbHelper, "Alan Turing",
+                "WW2 Computer Science",
+                R.drawable.alanturing);
+        TestCharaDbHelper.testInsertOneRow(charaDbHelper, "Miku",
+                "Vocaloid",
+                R.drawable.hatsunemiku);
         //TODO 8.1 Get References to the widgets
 
 
