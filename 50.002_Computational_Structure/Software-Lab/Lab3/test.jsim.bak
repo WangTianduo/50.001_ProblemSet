@@ -1,6 +1,6 @@
-.include "50002/nominal.jsim"
-.include "50002/stdcell.jsim"
-.include "50002/lab3checkoff_10.jsim"
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/nominal.jsim"
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/stdcell.jsim"
+.include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab3checkoff_10.jsim"
 
 
 .subckt or16 IN[15:0] out
