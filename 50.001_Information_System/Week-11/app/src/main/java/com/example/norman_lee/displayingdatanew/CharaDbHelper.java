@@ -202,7 +202,7 @@ public class CharaDbHelper extends SQLiteOpenHelper {
                 WHERE_CLAUSE,
                 WHERE_ARGS
         );
-        
+
         return rowsDeleted;
     }
 

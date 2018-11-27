@@ -1,6 +1,7 @@
 package com.example.norman_lee.displayingdatanew;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ public class CharaAdapter extends RecyclerView.Adapter<CharaAdapter.CharaViewHol
     //TODO 9.3 assign the inputs to instance variables
     public CharaAdapter(Context context, CharaDbHelper charaDbHelper) {
         mInflater = LayoutInflater.from(context);
+        this.context = context;
+        this.charaDbHelper = charaDbHelper;
     }
 
     //TODO 9.4 onCreateViewHolder inflates each CardView layout (no coding)
@@ -34,13 +37,19 @@ public class CharaAdapter extends RecyclerView.Adapter<CharaAdapter.CharaViewHol
     //TODO 9.5 onBindViewHolder binds the data to each card according to its position
     @Override
     public void onBindViewHolder(@NonNull CharaViewHolder charaViewHolder, int i) {
+        CharaDbHelper.CharaData charaData = charaDbHelper.queryOneRow(i);
 
+        charaViewHolder.textViewName.setText(charaData.getName());
+        charaViewHolder.textViewDescription.setText(charaData.getDescription());
+        charaViewHolder.textViewPosition.setText(Integer.toString(i));
+        charaViewHolder.imageViewChara.setImageBitmap(charaData.getBitmap());
     }
 
     //TODO 9.6 this method controls the number of cardviews in the recyclerview
     @Override
     public int getItemCount() {
-        return 0;
+
+        return (int) charaDbHelper.queryNumRows();
     }
 
     //TODO 9.2 Complete the constructor to initialize the widgets
@@ -53,6 +62,10 @@ public class CharaAdapter extends RecyclerView.Adapter<CharaAdapter.CharaViewHol
 
         public CharaViewHolder(View view){
             super(view);
+            textViewName = view.findViewById(R.id.cardViewTextName);
+            textViewDescription = view.findViewById(R.id.cardViewTextDescription);
+            textViewPosition = view.findViewById(R.id.cardViewTextCount);
+            imageViewChara = view.findViewById(R.id.cardViewImage);
 
         }
 
