@@ -37,11 +37,14 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
     //TODO 9.5 onBindViewHolder binds the data to each card according to its position
     @Override
     public void onBindViewHolder(@NonNull ClassViewHolder ClassViewHolder, int i) {
-        ClassDbHelper.ClassData ClassData = ClassDbHelper.queryOneRow(i);
+        ClassDbHelper.ClassData classData = ClassDbHelper.queryOneRow(i);
 
-        ClassViewHolder.textViewName.setText(ClassData.getName());
-        ClassViewHolder.textViewSession.setText(ClassData.getSession());
+        ClassViewHolder.textViewName.setText(classData.getName());
+        ClassViewHolder.textViewSession.setText(classData.getSession());
         ClassViewHolder.textViewPosition.setText(Integer.toString(i));
+        ClassViewHolder.textViewDate.setText(classData.getDate());
+        ClassViewHolder.textViewTiming.setText(classData.getTiming());
+        ClassViewHolder.textViewVenue.setText(classData.getVenue());
     }
 
     //TODO 9.6 this method controls the number of cardviews in the recyclerview
@@ -57,12 +60,18 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         public TextView textViewName;
         public TextView textViewSession;
         public TextView textViewPosition;
+        public TextView textViewDate;
+        public TextView textViewTiming;
+        public TextView textViewVenue;
 
         public ClassViewHolder(View view){
             super(view);
             textViewName = view.findViewById(R.id.cardViewTextName);
             textViewSession = view.findViewById(R.id.cardViewTextDescription);
             textViewPosition = view.findViewById(R.id.cardViewTextCount);
+            textViewDate = view.findViewById(R.id.cardViewTextDate);
+            textViewTiming = view.findViewById(R.id.cardViewTextTiming);
+            textViewVenue = view.findViewById(R.id.cardViewTextVenue);
 
         }
 

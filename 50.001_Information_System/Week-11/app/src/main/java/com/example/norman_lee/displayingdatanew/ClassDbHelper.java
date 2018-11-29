@@ -93,8 +93,11 @@ public class ClassDbHelper extends SQLiteOpenHelper {
             for(int i = 0; i <= jsonArray.length(); i++){
                 String name = jsonArray.getJSONObject(i).getString("name");
                 String session = jsonArray.getJSONObject(i).getString("session");
+                String date = jsonArray.getJSONObject(i).getString("date");
+                String timing = jsonArray.getJSONObject(i).getString("timing");
+                String venue = jsonArray.getJSONObject(i).getString("venue");
 
-                arrayList.add(new ClassDbHelper.ClassData(name, session));
+                arrayList.add(new ClassDbHelper.ClassData(name, session, date, timing, venue));
             }
         }catch(JSONException e){
             e.printStackTrace();
@@ -108,6 +111,9 @@ public class ClassDbHelper extends SQLiteOpenHelper {
 
             cv.put(ClassContract.ClassEntry.COL_NAME, arrayList.get(i).getName());
             cv.put(ClassContract.ClassEntry.COL_SESSION, arrayList.get(i).getSession());
+            cv.put(ClassContract.ClassEntry.COL_DATE, arrayList.get(i).getDate());
+            cv.put(ClassContract.ClassEntry.COL_TIMING, arrayList.get(i).getTiming());
+            cv.put(ClassContract.ClassEntry.COL_VENUE, arrayList.get(i).getVenue());
 
             sqLiteDatabase.insert(ClassContract.ClassEntry.TABLE_NAME,null,cv);
         }
@@ -124,6 +130,8 @@ public class ClassDbHelper extends SQLiteOpenHelper {
         if (readableDb == null) {
             readableDb = getReadableDatabase();
         }
+
+        Log.i("ASDF", "RANDOM");
         Cursor cursor = readableDb.rawQuery(
                 ClassContract.ClassSql.SQL_QUERY_ONE_RANDOM_ROW, null);
         return getDataFromCursor(0, cursor);
@@ -146,8 +154,11 @@ public class ClassDbHelper extends SQLiteOpenHelper {
     //TODO 7.8 Get the data from cursor
     private ClassData getDataFromCursor(int position, Cursor cursor){
 
-        String name=null;
-        String session =null;
+        String name = null;
+        String session = null;
+        String date = null;
+        String timing = null;
+        String venue = null;
 
         cursor.moveToPosition(position);
         // extract the name column
@@ -157,7 +168,16 @@ public class ClassDbHelper extends SQLiteOpenHelper {
         int sessionIndex = cursor.getColumnIndex(ClassContract.ClassEntry.COL_SESSION);
         session = cursor.getString(sessionIndex);
 
-        return new ClassData(name, session);
+        int dateIndex = cursor.getColumnIndex(ClassContract.ClassEntry.COL_DATE);
+        date = cursor.getString(dateIndex);
+
+        int timingIndex = cursor.getColumnIndex(ClassContract.ClassEntry.COL_TIMING);
+        timing = cursor.getString(timingIndex);
+
+        int venueIndex = cursor.getColumnIndex(ClassContract.ClassEntry.COL_VENUE);
+        venue = cursor.getString(venueIndex);
+
+        return new ClassData(name, session, date, timing, venue);
     }
 
     //TODO 7.10 Insert one row when data is passed to it
@@ -173,6 +193,15 @@ public class ClassDbHelper extends SQLiteOpenHelper {
 
         contentValues.put(ClassContract.ClassEntry.COL_SESSION,
                 ClassData.getSession());
+
+        contentValues.put(ClassContract.ClassEntry.COL_DATE,
+                ClassData.getDate());
+
+        contentValues.put(ClassContract.ClassEntry.COL_TIMING,
+                ClassData.getTiming());
+
+        contentValues.put(ClassContract.ClassEntry.COL_VENUE,
+                ClassData.getVenue());
 
 
         long row = writeableDb.insert(ClassContract.ClassEntry.TABLE_NAME, null, contentValues);
@@ -216,10 +245,17 @@ public class ClassDbHelper extends SQLiteOpenHelper {
 
         private String name;
         private String session;
+        private String date;
+        private String timing;
+        private String venue;
 
-        public ClassData(String name, String session) {
+        public ClassData(String name, String session, String date,
+                         String timing, String venue) {
             this.name = name;
             this.session = session;
+            this.date = date;
+            this.timing = timing;
+            this.venue = venue;
         }
 
         public String getSession() { return session; }
@@ -227,6 +263,12 @@ public class ClassDbHelper extends SQLiteOpenHelper {
         public String getName() {
             return name;
         }
+
+        public String getTiming() { return timing; }
+
+        public String getDate() { return date; }
+
+        public String getVenue() { return venue; }
     }
 
 }

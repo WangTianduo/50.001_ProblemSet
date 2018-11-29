@@ -19,6 +19,9 @@ public class ClassContract {
         public static final String TABLE_NAME = "Chara";
         public static final String COL_NAME = "name";
         public static final String COL_SESSION = "session";
+        public static final String COL_DATE = "date";
+        public static final String COL_TIMING = "timing";
+        public static final String COL_VENUE = "venue";
 //        public static final String COL_FILE = "file";
 
     }
@@ -32,9 +35,10 @@ public class ClassContract {
                 + ClassEntry.TABLE_NAME + SPACE + "("
                 + ClassEntry._ID + SPACE + "INTEGER PRIMARY KEY AUTOINCREMENT" + COMMA
                 + ClassEntry.COL_NAME + SPACE + "TEXT NOT NULL" + COMMA
-                + ClassEntry.COL_SESSION + SPACE + "TEXT NOT NULL" +");";
-//                + COMMA
-//                + ClassEntry.COL_FILE + SPACE + "BLOB NOT NULL" + ");" ;
+                + ClassEntry.COL_SESSION + SPACE + "TEXT NOT NULL" + COMMA
+                + ClassEntry.COL_DATE + SPACE + "TEXT NOT NULL" + COMMA
+                + ClassEntry.COL_TIMING + SPACE + "TEXT NOT NULL" + COMMA
+                + ClassEntry.COL_VENUE + SPACE + "TEXT NOT NULL" +");";
 
         public static String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + ClassEntry.TABLE_NAME;
 
