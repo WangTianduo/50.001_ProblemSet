@@ -43,26 +43,44 @@ public class MainActivity extends AppCompatActivity {
         //TODO 7.13 test the methods you wrote
         TestCharaDbHelper.testQueryOneRowRandom(charaDbHelper);
         TestCharaDbHelper.testTable(charaDbHelper);
+
+        TestCharaDbHelper.testDeleteOneRow(charaDbHelper, "Alan Turing");
+
         TestCharaDbHelper.testInsertOneRow(charaDbHelper, "Alan Turing",
-                "WW2 Computer Science",
+                "WW2 Computer Scientist",
                 R.drawable.alanturing);
+
         TestCharaDbHelper.testInsertOneRow(charaDbHelper, "Miku",
                 "Vocaloid",
                 R.drawable.hatsunemiku);
-        //TODO 8.1 Get References to the widgets
 
+        TestCharaDbHelper.testDeleteOneRow(charaDbHelper, "Miku");
+
+        //TODO 8.1 Get References to the widgets
+        imageViewFile = findViewById(R.id.imageViewFile);
+        textViewName = findViewById(R.id.textViewName);
+        buttonGetImage = findViewById(R.id.buttonGetImage);
 
         //TODO 8.2 when the getImage button is clicked, get a random image from the SQLite Database
+         buttonGetImage.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 CharaDbHelper.CharaData charaData = charaDbHelper.queryOneRowRandom();
 
+                 textViewName.setText(charaData.getName());
+                 imageViewFile.setImageBitmap(charaData.getBitmap());
+             }
+         });
 
         //TODO 8.3 When the fab is clicked, launch DataEntryActivity and invoke startActivityForResult
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                    Intent intent = new Intent(MainActivity.this, DataEntryActivity.class);
+                    startActivityForResult(intent, REQUEST_CODE_FAB);
             }
         });
     }

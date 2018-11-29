@@ -42,6 +42,7 @@ public class CharaDbHelper extends SQLiteOpenHelper {
     private static String TAG = "ss";
 
     //TODO 7.4 Create the Constructor and make it a singleton
+    // Singleton Pattern
     private CharaDbHelper(Context context){
         super(context, CharaContract.CharaEntry.TABLE_NAME, null, DATABASE_VERSION );
         this.context = context;
@@ -131,7 +132,8 @@ public class CharaDbHelper extends SQLiteOpenHelper {
             readableDb = getReadableDatabase();
         }
 
-        Cursor cursor = readableDb.rawQuery(CharaContract.CharaSql.SQL_QUERY_ONE_RANDOM_ROW, null);
+        Cursor cursor = readableDb.rawQuery(
+                CharaContract.CharaSql.SQL_QUERY_ONE_RANDOM_ROW, null);
         return getDataFromCursor(0, cursor);
 
     }
@@ -179,9 +181,15 @@ public class CharaDbHelper extends SQLiteOpenHelper {
         }
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(CharaContract.CharaEntry.COL_NAME, charaData.getName());
-        contentValues.put(CharaContract.CharaEntry.COL_DESCRIPTION, charaData.getDescription());
+
+        contentValues.put(CharaContract.CharaEntry.COL_NAME,
+                charaData.getName());
+
+        contentValues.put(CharaContract.CharaEntry.COL_DESCRIPTION,
+                charaData.getDescription());
+
         byte[] bitmapData = Utils.convertBitmapToByteArray(charaData.getBitmap());
+
         contentValues.put(CharaContract.CharaEntry.COL_FILE, bitmapData);
 
         long row = writeableDb.insert(CharaContract.CharaEntry.TABLE_NAME, null, contentValues);

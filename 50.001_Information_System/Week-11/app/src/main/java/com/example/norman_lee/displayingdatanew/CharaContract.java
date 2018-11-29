@@ -12,9 +12,7 @@ public class CharaContract {
 
     //TODO 7.2 Prevent Instantiation of this Contract class
 
-    private CharaContract() {
-
-    }
+    private CharaContract() { }
 
     public static final class CharaEntry implements BaseColumns {
 
