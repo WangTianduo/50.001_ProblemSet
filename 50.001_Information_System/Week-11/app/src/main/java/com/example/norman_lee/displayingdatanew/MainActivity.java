@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
     private CharaDbHelper charaDbHelper;
     private SQLiteDatabase charaDb;
+    private ClassDbHelper classDbHelper;
+    private SQLiteDatabase classDb;
 
     public static String PACKAGE_NAME;
 
@@ -38,23 +41,24 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //TODO 7.12 get an instance of charaDbHelper
-        charaDbHelper = CharaDbHelper.createCharaDbHelper(this);
+        //charaDbHelper = CharaDbHelper.createCharaDbHelper(this);
+        classDbHelper = ClassDbHelper.createClassDbHelper(this);
 
         //TODO 7.13 test the methods you wrote
-        TestCharaDbHelper.testQueryOneRowRandom(charaDbHelper);
-        TestCharaDbHelper.testTable(charaDbHelper);
-
-        TestCharaDbHelper.testDeleteOneRow(charaDbHelper, "Alan Turing");
-
-        TestCharaDbHelper.testInsertOneRow(charaDbHelper, "Alan Turing",
-                "WW2 Computer Scientist",
-                R.drawable.alanturing);
-
-        TestCharaDbHelper.testInsertOneRow(charaDbHelper, "Miku",
-                "Vocaloid",
-                R.drawable.hatsunemiku);
-
-        TestCharaDbHelper.testDeleteOneRow(charaDbHelper, "Miku");
+//        TestCharaDbHelper.testQueryOneRowRandom(charaDbHelper);
+//        TestCharaDbHelper.testTable(charaDbHelper);
+//
+//        TestCharaDbHelper.testDeleteOneRow(charaDbHelper, "Alan Turing");
+//
+//        TestCharaDbHelper.testInsertOneRow(charaDbHelper, "Alan Turing",
+//                "WW2 Computer Scientist",
+//                R.drawable.alanturing);
+//
+//        TestCharaDbHelper.testInsertOneRow(charaDbHelper, "Miku",
+//                "Vocaloid",
+//                R.drawable.hatsunemiku);
+//
+//        TestCharaDbHelper.testDeleteOneRow(charaDbHelper, "Miku");
 
         //TODO 8.1 Get References to the widgets
         imageViewFile = findViewById(R.id.imageViewFile);
@@ -65,10 +69,11 @@ public class MainActivity extends AppCompatActivity {
          buttonGetImage.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                 CharaDbHelper.CharaData charaData = charaDbHelper.queryOneRowRandom();
-
+//                 CharaDbHelper.CharaData charaData = charaDbHelper.queryOneRowRandom();
+                 Log.i("ASDF", "asdfghjkl");
+                 ClassDbHelper.ClassData charaData = classDbHelper.queryOneRowRandom();
                  textViewName.setText(charaData.getName());
-                 imageViewFile.setImageBitmap(charaData.getBitmap());
+//                 imageViewFile.setImageBitmap(charaData.getBitmap());
              }
          });
 
@@ -107,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         //TODO 9.1 Complete this to bring users to the RecyclerView activity
 
         if (id == R.id.go_recycler_view) {
-            Intent intent = new Intent(this, RecylerViewActivity.class);
+            Intent intent = new Intent(this, RRactivity.class);
             startActivity(intent);
         }
 

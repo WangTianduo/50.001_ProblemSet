@@ -1,17 +1,12 @@
 [
-  { "name": "Pikachu",
-  "description": "Pokemon",
-  "file": "pikachu"},
-  { "name": "Judy Hopps",
-    "description": "Zootopia",
-    "file": "judyhopps"},
-  { "name": "Yoda",
-    "description": "Star Wars",
-    "file": "yoda"},
-  { "name": "Tom and Jerry",
-    "description": "Tom and Jerry",
-    "file": "tomandjerry"},
-  { "name": "Mr Otter",
-    "description": "Marina Bay Otter Show",
-    "file": "marinabayotter"}
+  { "name": "Pi",
+    "session": "Pokemon"},
+  { "name": "Judy",
+    "session": "Zootopia"},
+  { "name": "Yo",
+    "session": "Star Wars"},
+  { "name": "Tom and",
+    "session": "Tom and Jerry"},
+  { "name": "Mr",
+    "session": "Marina Bay Otter Show"}
 ]

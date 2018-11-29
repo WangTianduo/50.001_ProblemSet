@@ -21,6 +21,7 @@
         </activity>
         <activity android:name=".DataEntryActivity" />
         <activity android:name=".RecylerViewActivity"></activity>
+        <activity android:name=".RRactivity"></activity>
     </application>
 
 </manifest>
