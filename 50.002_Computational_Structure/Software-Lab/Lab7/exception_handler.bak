@@ -1,0 +1,152 @@
+.include /Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/beta.uasm
+.include /Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab7macros.uasm
+.include /Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab7checkoff.uasm
+
+||| Handler for opcode 01000(LDB)& 010001(STB) extension:
+
+regs:	RESERVE(32)
+
+mask0: 0x00 0x00 0x00 0x00  		| mask for SEXT0
+mask1: 0xFF 0xFF 0x00 0x00		| mask for SEXT1
+UI:
+	save_all_regs(regs)
+	LD(xp, -4, r0)
+	extract_field(r0, 31, 26, r1)
+	CMPEQC(r1, 0x10, r2)		| cmp r1 with 0x01000, store result in r2
+	BT(r2, LDB)			| br to LDB if r2 == ture
+	CMPEQC(r1, 0x11, r2)		| cmp r1 with 0x01001, store result in r2
+	BT(r2, STB)			| br to STB if r2 == true
+
+	LD(r31, regs, r0)
+	LD(r31, regs+4, r1)
+	LD(r31, regs+8, r2)
+	BR(_IllegalInstruction)
+
+LDB:
+	extract_field(r0, 25, 21, r1)	| r1 -> no.Rc
+	MULC(r1, 4, r1)			| convert to byte offset into regs array
+	extract_field(r0, 20, 16, r2)	| r2 -> no.Ra
+	MULC(r2, 4, r2)			| convert to byte offset into regs array
+	LD(r2, regs, r2)		| r2 -> Reg[Ra]
+	extract_field(r0, 15, 0, r3)	| r3 -> 16-bit literal
+	LDR(mask0, r7)			| r7 -> 0x 00 00 00 00
+	LDR(mask1, r8)			| r8 -> 0x FF FF 00 00
+	SHLC(r8, 16, r8)
+	extract_field(r3, 15, 15, r0)	| r0 -> sign bit of literal
+	BEQ(r0, SEXT0_LD)
+SEXT1_LD:
+	ADD(r3, r8, r3)			| SEXT(literal) in r3	
+SEXT0_LD:
+	ADD(r3, r7, r3)			| SEXT(literal) in r3
+
+	ADD(r2, r3, r4)			| r4 -> EA
+	extract_field(r4, 1, 0, r5)	| r5 -> EA[1:0]
+	CMPEQC(r5, 0x0, r6)		| cmp EA[1:0] with 0x00
+	BT(r6, load1)			| br to load1 if r6 == true
+	CMPEQC(r5, 0x1, r6)		| cmp EA[1:0] with 0x00
+	BT(r6, load2)			| br to load1 if r6 == true
+	CMPEQC(r5, 0x2, r6)		| cmp EA[1:0] with 0x00
+	BT(r6, load3)			| br to load1 if r6 == true
+	CMPEQC(r5, 0x3, r6)		| cmp EA[1:0] with 0x00
+	BT(r6, load4)			| br to load1 if r6 == true
+	BR(end_branch_LD)		| br to the end of branch
+
+load1:		| load reg[rc][7:0] with MDATA[7:0]
+	LD(r4, 0x0, r9)			| r9 -> MDATA
+	extract_field(r9, 7, 0, r9)	| r9 -> MDATA[7:0]
+	ST(r9, regs, r1)
+	BR(end_branch_LD)
+load2:		| load reg[rc][7:0] with MDATA[15:8]
+	LD(r4, 0x0, r9)			| r9 -> MDATA
+	extract_field(r9, 15, 8, r9)	| r9 -> MDATA[15:8]
+	ST(r9, regs, r1)
+	BR(end_branch_LD)
+load3:		| load reg[rc][7:0] with MDATA[23:16]
+	LD(r4, 0x0, r9)			| r9 -> MDATA
+	extract_field(r9, 23, 16, r9)	| r9 -> MDATA[23:16]
+	ST(r9, regs, r1)
+	BR(end_branch_LD)
+load4:		| load reg[rc][7:0] with MDATA[31:24]
+	LD(r4, 0x0, r9)			| r9 -> MDATA
+	extract_field(r9, 31, 24, r9)	| r9 -> MDATA[31:24]
+	ST(r9, regs, r1)
+
+end_branch_LD:	| the end of branch
+	restore_all_regs(regs)
+	JMP(xp)
+
+
+STB:	
+.breakpoint
+	extract_field(r0, 25, 21, r1)	| r1 -> no.Rc
+	MULC(r1, 4, r1)			| convert to byte offset into regs array
+	LD(r1, regs, r1)
+	extract_field(r0, 20, 16, r2)	| r2 -> no.Ra
+	MULC(r2, 4, r2)			| convert to byte offset into regs array
+	LD(r2, regs, r2)		| r2 -> Reg[Ra]
+	extract_field(r0, 15, 0, r3)	| r3 -> 16-bit literal
+	LDR(mask0, r7)			| r7 -> 0x 00 00 00 00
+	LDR(mask1, r8)			| r8 -> 0x FF FF 00 00
+	SHLC(r8, 16, r8)
+	extract_field(r3, 15, 15, r0)	| r0 -> sign bit of literal
+	BEQ(r0, SEXT0_ST)
+SEXT1_ST:
+	ADD(r3, r8, r3)			| SEXT(literal) in r3	
+SEXT0_ST:
+	ADD(r3, r7, r3)			| SEXT(literal) in r3
+
+	ADD(r2, r3, r4)			| r4 -> EA
+	extract_field(r4, 1, 0, r5)	| r5 -> EA[1:0]
+	CMPEQC(r5, 0x0, r6)		| cmp EA[1:0] with 0x00
+	BT(r6, store1)			| br to load1 if r6 == true
+	CMPEQC(r5, 0x1, r6)		| cmp EA[1:0] with 0x00
+	BT(r6, store2)			| br to load1 if r6 == true
+	CMPEQC(r5, 0x2, r6)		| cmp EA[1:0] with 0x00
+	BT(r6, store3)			| br to load1 if r6 == true
+	CMPEQC(r5, 0x3, r6)		| cmp EA[1:0] with 0x00
+	BT(r6, store4)			| br to load1 if r6 == true
+	BR(end_branch_LD)		| br to the end of branch
+
+store1:		| load reg[rc][7:0] with MDATA[7:0]
+	extract_field(r1, 7, 0, r1)	| r1 -> Reg[Rc][7:0]
+	SHLC(r1, 0, r1)			| shift r1 by 0 bit
+	LD(r4, 0x0, r9)			| r9 -> Mem[EA]
+	extract_field(r9, 31, 8, r9)	| r9 -> 00000000Mem[EA][31:8]
+	SHLC(r9, 8, r9)			| r9 -> Mem[EA][31:8]00000000
+	ADD(r1, r9, r1)			| r1 -> Mem[EA][31:8]Reg[Rc][7:0]
+	ST(r1, 0x0, r4)			| Mem[EA] -> MDATA[7:0]
+	BR(end_branch_ST)
+store2:		| load reg[rc][7:0] with MDATA[15:8]
+	extract_field(r1, 7, 0, r1)	| r1 -> Reg[Rc][7:0]
+	SHLC(r1, 8, r1)			| shift r1 by 0 bit
+	LD(r4, 0x0, r9)			| r9 -> Mem[EA]				
+	extract_field(r9, 31, 16, r9)	| r9 -> 000Mem[EA][31:16]
+	SHLC(r9, 16, r9)		| r9 -> Mem[EA][31:16]000
+	extract_field(r9, 7, 0, r10)	| r10 -> 000Mem[EA][7:0]
+	ADD(r1, r9, r1)			| r1 -> Mem[EA][31:16]Reg[Rc][15:8]000
+	ADD(r1, r10, r1)		| r1 -> Mem[EA][31:16]Reg[Rc][15:8]Mem[7:0]		
+	ST(r1, 0x0, r4)			| Mem[EA] -> MDATA[15:8]
+	BR(end_branch_ST)
+store3:		| load reg[rc][7:0] with MDATA[23:16]
+	extract_field(r1, 7, 0, r1)	| r1 -> Reg[Rc][7:0]
+	SHLC(r1, 16, r1)		| shift r1 by 0 bit
+	LD(r4, 0x0, r9)			| r9 -> Mem[EA]				
+	extract_field(r9, 31, 24, r9)	| r9 -> 00000000Mem[EA][31:24]
+	SHLC(r9, 16, r9)		| r9 -> Mem[EA][31:8]00000000
+	extract_field(r9, 15, 0, r10)	| r10 -> 000Mem[EA][15:0]
+	ADD(r1, r9, r1)			| r1 -> Mem[31:24]Reg[Rc][7:0]000
+	ADD(r1, r10, r1)		| r1 -> Mem[31:24]Reg[Rc][7:0]Mem[15:0]
+	ST(r1, 0x0, r4)			| Mem[EA] -> MDATA[23:16]
+	BR(end_branch_ST)
+store4:		| load reg[rc][7:0] with MDATA[31:24]
+	extract_field(r1, 7, 0, r1)	| r1 -> Reg[Rc][7:0]
+	SHLC(r1, 24, r1)		| shift r1 by 0 bit
+	LD(r4, 0x0, r9)			| r9 -> Mem[EA]			
+	extract_field(r9, 23, 0, r10)	| r10 -> 000Mem[EA][23:0]
+	ADD(r1, r10, r1)		| r1 -> Reg[Rc][7:0]Mem[EA][23:0]
+	ST(r1, 0x0, r4)			| Mem[EA] -> MDATA[31:24]
+	BR(end_branch_ST)
+
+end_branch_ST:	| the end of branch
+	restore_all_regs(regs)
+	JMP(xp)

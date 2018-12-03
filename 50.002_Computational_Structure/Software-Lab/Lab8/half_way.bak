@@ -213,15 +213,15 @@ GetKeyH:				| return key code in r0, or block
 GetMosH:
 	LD(Mos_State, r0)
 	
-	ADDC(r0, 1, r0)
-	BEQ(r0, I_Wait)
+	ADDC(r0, 1, r1)
+	BEQ(r1, I_Wait)
 	
 	LD(Mos_State, r0)
 	ST(r0, UserMState)
 
-	ADDC(r31, -1, r0)	
+	ADDC(r31, -1, r1)	
 
-	ST(r0, Mos_State)
+	ST(r1, Mos_State)
 	BR(I_Rtn)
 	
 ||| Interrupt side: read key, store it into buffer.
@@ -569,7 +569,9 @@ WrEnd:
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 Prompt:	semaphore(1)		| To keep us from typing next prompt
-				| while P1 is typing previous output
+				| while P1 is typing previous output.
+MosInfo: semaphore(1)
+
 P0Start:WrMsg()
 	.text "Start typing, Bunky.\n\n"
 
@@ -582,14 +584,6 @@ P0Read:	Wait(Prompt)		| Wait until P1 has caught up...
 	.text "> "
 
 	LD(P0LinP, r3)		| ...then read a line into buffer...
-P0CheckMse: LD(Mos_State, r0)
-	CMPEQC(r0, -1, r1)
-	BT(r1, P0CheckKey)
-	Signal(MosInfo)
-	BR(P0Read)
-
-P0CheckKey: LD(Key_State, r0)
-	BEQ(r0, P0CheckMse)
 
 P0RdCh: GetKey()		| read next character,
 
@@ -761,32 +755,33 @@ P2Start:
 
 P2Stack: STORAGE(256)
 
-MosInfo: semaphore(0)
-
 P3Start:
-	LD(P3Stack, r9)
-P3RdClick:
 	Wait(MosInfo)
 	Mouse()
+	Yield()
 	WrMsg()
-	.text "\nClick at "
+	.text "\n"
+	WrMsg()
+	.text "Click at x = "
 	SHLC(r0, 16, r1)
 	SHRC(r1, 16, r1)
 	SHRC(r0, 16, r0)
-	WrMsg()
-	.text "x = "
 	HexPrt()
 	WrMsg()
-	.text ", "
-	ADDC(r1, 0, r0)
-	WrMsg()
-	.text "y = "
+	.text ", y = "
+	MOVE(r1, r0)
 	HexPrt()
 	WrMsg()
 	.text "\n"
-	Yield()
-	Signal(Prompt)
-BR(P3Start)		| return here after others run.
+	LD(Count3, r0)		| print out the quantum count
+	HexPrt()		|  as part of the count, then
+	WrMsg()			|  the remainder.
+	.text "> "
+	WrMsg()
+	.text "\n"
+
+	Signal(Prompt)	
+	BR(P3Start)		| return here after others run.
 
 P3Stack: STORAGE(256)
 
