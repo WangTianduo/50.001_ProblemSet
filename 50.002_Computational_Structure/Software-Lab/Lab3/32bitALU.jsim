@@ -4,47 +4,41 @@
 .include "/Users/wangtianduo/Desktop/Term4/Computer_Science/50.002_Computational_Structure/courseware/lab3checkoff_10.jsim"
 
 .subckt FA a b ci s co
-XNand1 a b x xor2
-Xnand2 a b y nand2
-Xnand3 x ci z nand2
-Xnand4 x ci s xor2
-XXor1 y z co nand2
+X1 a b x xor2
+X2 a b y nand2
+X3 x ci z nand2
+X4 x ci s xor2
+X5 y z co nand2
 .ends
 
 .subckt adder32 ALUFN[0] A[31:0] B[31:0] S[31:0] z v n
 
-XXor B[31:0] ALUFN0#32 XB[31:0] xor2
-XFA1 A0 XB0 ALUFN0 S0 C0 FA 
-XFA2 A[31:1] XB[31:1] C[30:0] S[31:1] C[31:1] FA
+X1 B[31:0] ALUFN0#32 XB[31:0] xor2
+X2 A0 XB0 ALUFN0 S0 C0 FA 
+X3 A[31:1] XB[31:1] C[30:0] S[31:1] C[31:1] FA
 
-*Zero
 XORSTAGE1 S[7:0] S[15:8] S[23:16] S[31:24] P[7:0] or4
 XORSTAGE2 P[1:0] P[3:2] P[5:4] P[7:6] Q[1:0] or4
 XORSTAGE3 Q1 Q0 z nor2
 
-*Negative
 .connect S[31] n
 
-*Overflow
-XINV1 S[31] s31inv inverter_2
-XINV2 A[31] a31inv inverter_2
-XINV3 XB[31] xb31inv inverter_2
-XAND1 A[31] XB[31] s31inv posoverflow and3
-XAND2 a31inv xb31inv s31 negoverflow and3
-XOR1  posoverflow negoverflow v or2
+X4 S[31] s31inv inverter_2
+X5 A[31] a31inv inverter_2
+X6 XB[31] xb31inv inverter_2
+X7 A[31] XB[31] s31inv pos and3
+X8 a31inv xb31inv s31 neg and3
+X9  pos neg v or2
 .ends
 
 .subckt compare32 ALUFN[2:1] z v n cmp[31:0]
-*Xless v l less xor2
-*Xlessequal z lessequal or2
-*Xid ALUFN[1] ALUFN[2] 0 z less lessequal lsb mux4
 
 .connect z equal inverter
-Xless v n less xor2
-Xlessequal z less lessequal or2
-Xid ALUFN[1] ALUFN[2] 0 equal less lessequal lsb mux4
+X1 v n aaa xor2
+X2 z aaa bbb or2
+X3 ALUFN[1] ALUFN[2] 0 equal aaa bbb ls mux4
 .connect cmp[31:1] 0
-.connect cmp[0] lsb
+.connect cmp[0] ls
 .ends
 
 .subckt boole32 ALUFN[3:0] A[31:0] B[31:0] boole[31:0]
